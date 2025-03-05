@@ -7,6 +7,7 @@ ENV GOCACHE=/go/caches/go-build
 
 ADD ./libs /workpath/libs
 ADD ./modules /workpath/modules
+ADD ./proto /workpath/proto
 ADD ./go.mod /workpath/go.mod
 ADD ./go.sum /workpath/go.sum
 
@@ -18,5 +19,7 @@ FROM alpine:3.21
 WORKDIR /app
 
 COPY --from=builder /workpath/main ./quickstart
+
+EXPOSE 8080
 
 ENTRYPOINT ["/app/quickstart"]

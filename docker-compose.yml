@@ -1,0 +1,7 @@
+services:
+  go-grpc-quickstart:
+    build:
+      context: .
+      dockerfile: Dockerfile.go-grpc-quickstart
+    ports:
+      - "8080:8080"
