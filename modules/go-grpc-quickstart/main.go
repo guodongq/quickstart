@@ -7,7 +7,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/guodongq/quickstart/libs/genproto/helloworld/v1"
+	pb "github.com/guodongq/quickstart/proto/helloworld/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"

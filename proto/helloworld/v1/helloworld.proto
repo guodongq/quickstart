@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package helloworld.v1;
 
-option go_package = "github.com/guodongq/quickstart/libs/genproto/helloworld/v1;helloworldv1";
+option go_package = "github.com/guodongq/quickstart/proto/helloworld/v1;helloworldv1";
 
 
 service Greeter {
