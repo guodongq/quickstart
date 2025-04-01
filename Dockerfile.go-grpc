@@ -1,0 +1,21 @@
+FROM golang:1.24.1-alpine3.21 AS builder
+
+WORKDIR /workpath
+
+ENV GOPATH=/go
+ENV GOCACHE=/go/caches/go-build
+
+COPY ./proto  /workpath/proto
+COPY ./src/go-grpc /workpath/src/go-grpc
+
+RUN cd /workpath/src/go-grpc && CGO_ENABLED=0 go build -o /workpath/quickstart /workpath/src/go-grpc/main.go
+
+FROM alpine:3.21
+
+WORKDIR /app
+
+COPY --from=builder /workpath/quickstart .
+
+EXPOSE 8080
+
+ENTRYPOINT ["/app/quickstart"]

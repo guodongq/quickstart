@@ -1,0 +1,7 @@
+services:
+  go-grpc:
+    build:
+      context: .
+      dockerfile: Dockerfile.go-grpc
+    ports:
+      - "8080:8080"

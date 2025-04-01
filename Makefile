@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 
-BUF_CMD := bin/buf
+BUF_CMD := $(shell pwd)/bin/buf
 BUF_VERSION := latest
 GOOS := Linux
 PE_SUFFIX :=
@@ -17,7 +17,7 @@ export PATH := $(shell pwd)/bin:$(PATH)
 
 .PHONY: generate
 generate: ## Generate proto
-	$(BUF_CMD) generate
+	cd proto && $(BUF_CMD) generate
 
 .PHONY: dependencies
 dependencies: ## Install dependencies
