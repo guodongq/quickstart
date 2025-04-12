@@ -1,0 +1,6 @@
+pageable:
+  description: properties of pagination parameters
+  in: query
+  name: pageable
+  schema:
+    $ref: './models/page_properties.yml'

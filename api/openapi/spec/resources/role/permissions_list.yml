@@ -1,0 +1,35 @@
+operationId: permissions_list
+
+summary: List All Permissions
+
+description: To list all your permissions, send a GET request to `/v1/permissions`.
+
+tags:
+  - Permissions
+
+parameters:
+  - $ref: '../../shared/parameters.yml#/pageable'
+  - $ref: './parameters.yml#/permission_search_filter'
+
+responses:
+  '200':
+    $ref: 'responses/permissions_list.yml'
+
+  '401':
+    $ref: '../../shared/responses/unauthorized.yml'
+
+  '403':
+    $ref: '../../shared/responses/forbidden.yml'
+
+  '429':
+    $ref: '../../shared/responses/too_many_requests.yml'
+
+  '500':
+    $ref: '../../shared/responses/server_error.yml'
+
+  default:
+    $ref: '../../shared/responses/unexpected_error.yml'
+
+#security:
+#  - bearer_auth:
+#      - 'permission:read'

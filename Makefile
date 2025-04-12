@@ -14,19 +14,30 @@ endif
 
 export PATH := $(shell pwd)/bin:$(PATH)
 
+SPEC_FILE ?= spec/openapi.yaml
+BUNDLE_PATH ?= dist/openapi.yaml
 
-.PHONY: generate
-generate: ## Generate proto
-	cd proto && $(BUF_CMD) generate
+openapi-dependencies: ## Install openapi dependencies
+	cd api/openapi && npm install
 
-.PHONY: dependencies
-dependencies: ## Install dependencies
+openapi-generate: ## Generate OpenAPI
+	@./scripts/utils/openapi-http.sh client src/go/internal/genopenapi/server server
+
+openapi-bundle: openapi-dependencies ## Generate OpenAPI bundle
+	cd api/openapi && npm run bundle -- ${SPEC_FILE} -o ${BUNDLE_PATH}
+
+openapi-preview: ## Preview OpenAPI
+	cd api/openapi &&  SPEC_FILE=$(SPEC_FILE) npm run preview
+
+buf-dependencies: ## Install dependencies
 	mkdir -p bin
 	curl -sSLo bin/buf$(PE_SUFFIX) https://github.com/bufbuild/buf/releases/$(BUF_VERSION)/download/buf-$(GOOS)-x86_64$(PE_SUFFIX)
 	curl -sSLo bin/protoc-gen-buf-breaking$(PE_SUFFIX) https://github.com/bufbuild/buf/releases/$(BUF_VERSION)/download/protoc-gen-buf-breaking-$(GOOS)-x86_64$(PE_SUFFIX)
 	curl -sSLo bin/protoc-gen-buf-lint$(PE_SUFFIX) https://github.com/bufbuild/buf/releases/$(BUF_VERSION)/download/protoc-gen-buf-lint-$(GOOS)-x86_64$(PE_SUFFIX)
-	chmod +x bin/*buf*	
+	chmod +x bin/*buf*
 
+buf-generate: ## Generate proto
+	cd api/proto && $(BUF_CMD) generate
 
 .DEFAULT_GOAL := help
 .PHONY: help

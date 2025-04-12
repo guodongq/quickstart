@@ -1,0 +1,8 @@
+description: The response will be a JSON object with a key called `role`. The
+  value of this will be an object with the standard role attributes
+
+content:
+  application/json:
+    schema:
+      allOf:
+        - $ref: '../models/role.yml#/role'

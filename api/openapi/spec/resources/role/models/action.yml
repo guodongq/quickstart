@@ -1,0 +1,28 @@
+action:
+  type: object
+  allOf:
+    - type: object
+      properties:
+        id:
+          $ref: '../../../shared/attributes/identity.yml'
+    - $ref: '#/action_base'
+    - type: object
+      properties:
+        meta:
+          $ref: '../../../shared/models/meta_properties.yml'
+  required:
+    - id
+    - code
+    - service_id
+    - meta
+
+action_base:
+  type: object
+  properties:
+    code:
+      type: string
+      description: The definition of API
+
+    service_id:
+      type: string
+      description: The audience that action need to access

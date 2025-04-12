@@ -1,0 +1,47 @@
+permission:
+  type: object
+  allOf:
+    - type: object
+      properties:
+        id:
+          $ref: '../../../shared/attributes/identity.yml'
+    - $ref: '#/permission_base'
+    - type: object
+      properties:
+        meta:
+          $ref: '../../../shared/models/meta_properties.yml'
+  required:
+    - id
+    - name
+    - actions
+    - tags
+    - types
+
+permission_base:
+  type: object
+  allOf:
+    - $ref: '#/permission_updatable'
+    - type: object
+      properties:
+        name:
+          type: string
+          description: The name of permission
+        types:
+          type: array
+          items:
+            type: string
+
+permission_updatable:
+  type: object
+  properties:
+    description:
+      type: string
+      description: The description of permission
+    actions:
+      type: array
+      items:
+        type: string
+    tags:
+      type: array
+      items:
+        type: string

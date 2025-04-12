@@ -1,0 +1,8 @@
+description: The response will be a JSON object with a key called `action`. The
+  value of this will be an object with the standard action attributes
+
+content:
+  application/json:
+    schema:
+      allOf:
+        - $ref: '../models/action.yml#/action'

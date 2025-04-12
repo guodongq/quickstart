@@ -1,0 +1,1051 @@
+openapi: 3.1.0
+info:
+  title: Quickstart Definition - OpenAPI 3.1
+  version: 1.0.1
+servers:
+  - url: https://localhost:8080/api
+  - url: https://api.quickstart.com/api
+security:
+  - bearer_auth: []
+  - apikey_auth: []
+tags:
+  - name: Actions
+    description: Action management
+  - name: Permissions
+    description: Permissions management
+  - name: Roles
+    description: Roles management
+paths:
+  /v1/actions:
+    post:
+      operationId: actions_create
+      summary: Create an Action
+      description: Create a new action.
+      tags:
+        - Actions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/action_base'
+              required:
+                - code
+                - service_id
+      responses:
+        '201':
+          $ref: '#/components/responses/existing_action'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      security:
+        - bearer_auth:
+            - action:create
+    get:
+      operationId: actions_list
+      summary: List All Actions
+      description: To list all your actions, send a GET request to `/v1/actions`.
+      tags:
+        - Actions
+      parameters:
+        - $ref: '#/components/parameters/pageable'
+        - $ref: '#/components/parameters/action_search_filter'
+      responses:
+        '200':
+          $ref: '#/components/responses/actions_list'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+  /v1/actions/{action_id}:
+    get:
+      operationId: actions_get
+      summary: Retrieve an Existing Action
+      description: To get an action, send a GET request to `/v1/actions/$ACTION_ID`
+      tags:
+        - Actions
+      parameters:
+        - $ref: '#/components/parameters/action_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_action'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    put:
+      operationId: actions_update
+      summary: Update an Action
+      description: To update an action, send a PUT request to `/v1/actions/$ACTION_ID`. All of the following attributes must be sent.
+      tags:
+        - Actions
+      parameters:
+        - $ref: '#/components/parameters/action_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/action_base'
+              required:
+                - code
+                - service_id
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_action'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    patch:
+      operationId: actions_patch
+      summary: Patch an Action
+      description: To update only specific attributes of an action, send a PATCH request to `/v1/actions/$ACTION_ID`. At least one of the following attributes needs to be sent.
+      tags:
+        - Actions
+      parameters:
+        - $ref: '#/components/parameters/action_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/action_base'
+              anyOf:
+                - required:
+                    - code
+                - required:
+                    - service_id
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_action'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    delete:
+      operationId: actions_delete
+      summary: Delete an Existing Action
+      description: |
+        To delete an action, send a DELETE requests to `/v1/actions/$ACTION_ID`. To
+        be deleted, an action must not have any resources assigned to it. Any existing
+        resources must first be reassigned or destroyed, or you will receive a 412 error.
+
+        A successful request will receive a 204 status code with no body in response.
+        This indicates that the request was processed successfully.
+      tags:
+        - Actions
+      parameters:
+        - $ref: '#/components/parameters/action_id'
+      responses:
+        '204':
+          $ref: '#/components/responses/no_content'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '412':
+          $ref: '#/components/responses/precondition_failed'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+  /v1/permissions:
+    post:
+      operationId: permissions_create
+      summary: Create an Permission
+      description: Create a new permission.
+      tags:
+        - Permissions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/permission_base'
+              required:
+                - name
+                - actions
+                - types
+                - tags
+      responses:
+        '201':
+          $ref: '#/components/responses/existing_permission'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    get:
+      operationId: permissions_list
+      summary: List All Permissions
+      description: To list all your permissions, send a GET request to `/v1/permissions`.
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/components/parameters/pageable'
+        - $ref: '#/components/parameters/permission_search_filter'
+      responses:
+        '200':
+          $ref: '#/components/responses/permissions_list'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+  /v1/permissions/{permission_id}:
+    get:
+      operationId: permissions_get
+      summary: Retrieve an Existing Permission
+      description: To get an permission, send a GET request to `/v1/permissions/$PERMISSION_ID`
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/components/parameters/permission_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_permission'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    put:
+      operationId: permissions_update
+      summary: Update an Permission
+      description: To update an permission, send a PUT request to `/v1/permissions/$PERMISSION_ID`. All of the following attributes must be sent.
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/components/parameters/permission_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/permission_updatable'
+              required:
+                - description
+                - actions
+                - tags
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_permission'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    patch:
+      operationId: permissions_patch
+      summary: Patch an Permission
+      description: To update only specific attributes of an permission, send a PATCH request to `/v1/permissions/$PERMISSION_ID`. At least one of the following attributes needs to be sent.
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/components/parameters/permission_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/permission_updatable'
+              anyOf:
+                - required:
+                    - description
+                - required:
+                    - actions
+                - required:
+                    - tags
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_permission'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    delete:
+      operationId: permissions_delete
+      summary: Delete an Existing Permission
+      description: |
+        To delete an permission, send a DELETE requests to `/v1/permissions/$PERMISSION_ID`. To
+        be deleted, an action must not have any resources assigned to it. Any existing
+        resources must first be reassigned or destroyed, or you will receive a 412 error.
+
+        A successful request will receive a 204 status code with no body in response.
+        This indicates that the request was processed successfully.
+      tags:
+        - Permissions
+      parameters:
+        - $ref: '#/components/parameters/permission_id'
+      responses:
+        '204':
+          $ref: '#/components/responses/no_content'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '412':
+          $ref: '#/components/responses/precondition_failed'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+  /v1/roles:
+    post:
+      operationId: roles_create
+      summary: Create an Role
+      description: Create a new role.
+      tags:
+        - Roles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/role_base'
+              required:
+                - name
+                - permissions
+                - type
+                - visibility
+      responses:
+        '201':
+          $ref: '#/components/responses/existing_role'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    get:
+      operationId: roles_list
+      summary: List All Roles
+      description: To list all your roles, send a GET request to `/v1/roles`.
+      tags:
+        - Roles
+      parameters:
+        - $ref: '#/components/parameters/pageable'
+        - $ref: '#/components/parameters/role_search_filter'
+      responses:
+        '200':
+          $ref: '#/components/responses/roles_list'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+  /v1/roles/{role_id}:
+    get:
+      operationId: roles_get
+      summary: Retrieve an Existing Role
+      description: To get an role, send a GET request to `/v1/roles/$ROLE_ID`
+      tags:
+        - Roles
+      parameters:
+        - $ref: '#/components/parameters/role_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_role'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    put:
+      operationId: roles_update
+      summary: Update an Role
+      description: To update an role, send a PUT request to `/v1/roles/$ROLE_ID`. All of the following attributes must be sent.
+      tags:
+        - Roles
+      parameters:
+        - $ref: '#/components/parameters/role_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/role_updatable'
+              required:
+                - name
+                - description
+                - permissions
+                - visibility
+                - tags
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_role'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    patch:
+      operationId: roles_patch
+      summary: Patch an Role
+      description: To update only specific attributes of an role, send a PATCH request to `/v1/roles/$ROLE_ID`. At least one of the following attributes needs to be sent.
+      tags:
+        - Roles
+      parameters:
+        - $ref: '#/components/parameters/role_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/role_updatable'
+              anyOf:
+                - required:
+                    - name
+                - required:
+                    - description
+                - required:
+                    - permissions
+                - required:
+                    - visibility
+                - required:
+                    - tags
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_role'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    delete:
+      operationId: roles_delete
+      summary: Delete an Existing Role
+      description: |
+        To delete an role, send a DELETE requests to `/v1/roles/$ROLE_ID`. To
+        be deleted, an action must not have any resources assigned to it. Any existing
+        resources must first be reassigned or destroyed, or you will receive a 412 error.
+
+        A successful request will receive a 204 status code with no body in response.
+        This indicates that the request was processed successfully.
+      tags:
+        - Roles
+      parameters:
+        - $ref: '#/components/parameters/role_id'
+      responses:
+        '204':
+          $ref: '#/components/responses/no_content'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '412':
+          $ref: '#/components/responses/precondition_failed'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+    basic_auth:
+      type: http
+      scheme: basic
+    apikey_auth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    oauth_user:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8080/api/v1/oauth/authorize
+          tokenUrl: http://localhost:8080/api/v1/oauth/token
+          scopes:
+            read: Read access
+            write: Write access
+    oauth_app:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: http://localhost:8080/api/v1/oauth/token
+          scopes:
+            board:read: Read the board
+  schemas:
+    page_properties:
+      type: object
+      description: properties of pageable object
+      properties:
+        skip:
+          name: skip
+          description: number of items to skip
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+          examples:
+            - 0
+        limit:
+          name: limit
+          description: max records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+          examples:
+            - 20
+        sort:
+          name: sort
+          description: Sorting criteria for the list, using a "+" or "-" prefix to specify ascending or descending order.
+          schema:
+            type: array
+            items:
+              type: string
+              pattern: ^(\+|-)[a-zA-Z0-9_]+$
+          examples:
+            - - +name
+              - '-age'
+              - address
+    action_base:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The definition of API
+        service_id:
+          type: string
+          description: The audience that action need to access
+    error:
+      type: object
+      properties:
+        id:
+          description: A short identifier corresponding to the HTTP status code returned. For example, the ID for a response returning a 404 status code would be "not_found."
+          type: string
+          examples:
+            - not_found
+        message:
+          description: A message providing additional information about the error, including  details to help resolve it when possible.
+          type: string
+          examples:
+            - The resource you were accessing could not be found.
+        request_id:
+          description: Optionally, some endpoints may include a request ID that should be provided when reporting bugs or opening support tickets to help identify the issue.
+          type: string
+          examples:
+            - 4d9d8375-3c56-4925-a3e7-eb137fed17e9
+      required:
+        - id
+        - message
+    total:
+      type: integer
+      description: Total number of records available.
+      format: int32
+      minimum: 0
+      examples:
+        - 100
+    identity:
+      type: string
+      format: uuid
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+      description: The unique identifier of the resource in UUID format
+      examples:
+        - 123e4567-e89b-12d3-a456-426614174000
+    meta_properties:
+      type: object
+      description: Information about the response itself.
+      properties:
+        created_by:
+          type: string
+          format: uuid
+          readOnly: true
+          examples:
+            - 7b24ac93-547f-4bbc-b6ed-26ce66433d1d
+          description: The user who created the resource.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          examples:
+            - '2018-09-27T20:10:35Z'
+          description: A time value given in ISO8601 combined date and time format that represents when the resource was created.
+        updated_by:
+          type: string
+          format: uuid
+          readOnly: true
+          examples:
+            - 7b24ac93-547f-4bbc-b6ed-26ce66433d1d
+          description: The user who updated the resource.
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          examples:
+            - '2018-09-27T20:10:35Z'
+          description: A time value given in ISO8601 combined date and time format that represents when the resource was updated.
+        deleted_by:
+          type: string
+          format: uuid
+          readOnly: true
+          examples:
+            - 7b24ac93-547f-4bbc-b6ed-26ce66433d1d
+          description: The user who deleted the resource.
+        deleted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          examples:
+            - '2018-09-27T20:10:35Z'
+          description: A time value given in ISO8601 combined date and time format that represents when the resource was deleted.
+        version:
+          type: integer
+          readOnly: true
+          examples:
+            - 1
+          description: The version of the resource.
+    action:
+      type: object
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/identity'
+        - $ref: '#/components/schemas/action_base'
+        - type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/meta_properties'
+      required:
+        - id
+        - code
+        - service_id
+        - meta
+    permission_updatable:
+      type: object
+      properties:
+        description:
+          type: string
+          description: The description of permission
+        actions:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+    permission_base:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/permission_updatable'
+        - type: object
+          properties:
+            name:
+              type: string
+              description: The name of permission
+            types:
+              type: array
+              items:
+                type: string
+    permission:
+      type: object
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/identity'
+        - $ref: '#/components/schemas/permission_base'
+        - type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/meta_properties'
+      required:
+        - id
+        - name
+        - actions
+        - tags
+        - types
+    role_updatable:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of permission
+        description:
+          type: string
+          description: The description of role
+        permissions:
+          type: array
+          items:
+            type: string
+        visibility:
+          type: string
+          examples:
+            - global
+            - node
+            - subtree
+        tags:
+          type: array
+          items:
+            type: string
+    role_base:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/role_updatable'
+        - type: object
+          properties:
+            type:
+              type: string
+            node_id:
+              type: string
+    role:
+      type: object
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/identity'
+        - $ref: '#/components/schemas/role_base'
+        - type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/meta_properties'
+      required:
+        - id
+        - name
+        - permissions
+        - visibility
+        - type
+        - tags
+  parameters:
+    pageable:
+      description: properties of pagination parameters
+      in: query
+      name: pageable
+      schema:
+        $ref: '#/components/schemas/page_properties'
+    action_search_filter:
+      name: searchFilter
+      description: search filter condition for list actions
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/action_base'
+      style: form
+    action_id:
+      name: action_id
+      description: A unique identifier for a action.
+      in: path
+      required: true
+      schema:
+        format: uuid
+        minimum: 1
+        type: string
+      style: simple
+    permission_search_filter:
+      name: searchFilter
+      description: search filter condition for list actions
+      in: query
+      required: true
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+          tag:
+            type: string
+      style: form
+    permission_id:
+      name: permission_id
+      description: A unique identifier for a permission.
+      in: path
+      required: true
+      schema:
+        format: uuid
+        minimum: 1
+        type: string
+      style: simple
+    role_search_filter:
+      name: searchFilter
+      description: search filter condition for list roles
+      in: query
+      required: true
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+          visibility:
+            type: string
+          tag:
+            type: string
+          type:
+            type: string
+          node_id:
+            type: string
+      style: form
+    role_id:
+      name: role_id
+      description: A unique identifier for a role.
+      in: path
+      required: true
+      schema:
+        format: uuid
+        minimum: 1
+        type: string
+      style: simple
+  responses:
+    unexpected_error:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: example_error
+            message: some error message
+    actions_list:
+      description: The response will be a JSON object with a key called `actions`. The value of this will be an object with the standard action attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  pageable:
+                    $ref: '#/components/schemas/page_properties'
+                  total:
+                    $ref: '#/components/schemas/total'
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/action'
+                    description: Array of actions.
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: unauthorized
+            message: Unable to authenticate you.
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: forbidden
+            message: You are not allowed to access this resource.
+    too_many_requests:
+      description: API Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: too_many_requests
+            message: API Rate limit exceeded.
+    server_error:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: server_error
+            message: Unexpected server-side error
+    existing_action:
+      description: The response will be a JSON object with a key called `action`. The value of this will be an object with the standard action attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/action'
+    not_found:
+      description: The resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: not_found
+            message: The resource you requested could not be found.
+    no_content:
+      description: The action was successful and the response body is empty.
+    precondition_failed:
+      description: Only an empty action can be deleted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: precondition_failed
+            message: cannot delete an action with resources. move or remove the resources first
+    permissions_list:
+      description: The response will be a JSON object with a key called `permissions`. The value of this will be an object with the standard permission attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  pageable:
+                    $ref: '#/components/schemas/page_properties'
+                  total:
+                    $ref: '#/components/schemas/total'
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/permission'
+                    description: Array of actions.
+    existing_permission:
+      description: The response will be a JSON object with a key called `permission`. The value of this will be an object with the standard permission attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/permission'
+    roles_list:
+      description: The response will be a JSON object with a key called `roles`. The value of this will be an object with the standard role attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  pageable:
+                    $ref: '#/components/schemas/page_properties'
+                  total:
+                    $ref: '#/components/schemas/total'
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/role'
+                    description: Array of roles.
+    existing_role:
+      description: The response will be a JSON object with a key called `role`. The value of this will be an object with the standard role attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/role'

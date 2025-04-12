@@ -1,0 +1,36 @@
+type: object
+
+description: properties of pageable object
+
+properties:
+  skip:
+    name: skip
+    description: number of items to skip
+    schema:
+      type: integer
+      format: int32
+      minimum: 0
+    examples:
+      - 0
+
+  limit:
+    name: limit
+    description: max records to return
+    schema:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 100
+    examples:
+      - 20
+
+  sort:
+    name: sort
+    description: Sorting criteria for the list, using a "+" or "-" prefix to specify ascending or descending order.
+    schema:
+      type: array
+      items:
+        type: string
+        pattern: '^(\+|-)[a-zA-Z0-9_]+$'
+    examples:
+      - [ '+name', '-age' , "address" ]

@@ -1,7 +1,14 @@
 services:
-  go-grpc:
+  go-grpc-quickstart:
     build:
-      context: .
-      dockerfile: Dockerfile.go-grpc
+      context: ./src/go
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.5"
+    command: "go-grpc-quickstart"
