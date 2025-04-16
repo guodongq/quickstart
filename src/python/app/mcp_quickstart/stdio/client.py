@@ -5,7 +5,6 @@ from typing import Optional
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from contextlib import AsyncExitStack
-from dotenv import load_dotenv
 from openai import OpenAI
 
 import os
