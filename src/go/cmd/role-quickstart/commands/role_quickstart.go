@@ -49,7 +49,7 @@ func NewCommand() *cobra.Command {
 			//)
 			//st.MustInit(chiProvider)
 
-			defer st.MustRun()
+			st.MustRun()
 		},
 	}
 	return command
