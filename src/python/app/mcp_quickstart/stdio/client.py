@@ -1,145 +1,151 @@
 import asyncio
 import json
-from typing import Optional
+import logging
+from contextlib import AsyncExitStack
+from typing import Optional, List, Dict, Any
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from contextlib import AsyncExitStack
-from openai import OpenAI
-
-import os
-import urllib3
-
-os.environ.pop("http_proxy", None)
-os.environ.pop("https_proxy", None)
-# Suppress warnings about Elasticsearch certificates
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+from utils.openai_util import OpenAIClient, config
 
 
 class MCPClient:
     def __init__(self):
-        """初始化 MCP 客户端"""
+        """Initialize MCP Client with optional tools."""
         self.session: Optional[ClientSession] = None
         self.exit_stack = AsyncExitStack()
-        self.model = "llama3.2:latest"
-        self.client = OpenAI(
-            api_key="ollama",  # 读取OpenAI API Key
-            base_url="http://localhost:11434/v1/",  # 使用local ollama
-            timeout=3000,
-        )
+        self.client = OpenAIClient()
+        self.available_tools: List[Dict[str, Any]] = []
 
     async def connect_to_server(self, server_script_path: str):
-        """Connect to an MCP server
+        """Connect to an MCP server and cache available tools.
 
         Args:
             server_script_path: Path to the server script (.py or .js)
         """
-        is_python = server_script_path.endswith('.py')
-        is_js = server_script_path.endswith('.js')
+        is_python = server_script_path.endswith(".py")
+        is_js = server_script_path.endswith(".js")
         if not (is_python or is_js):
             raise ValueError("Server script must be a .py or .js file")
 
         command = "python" if is_python else "node"
         server_params = StdioServerParameters(
-            command=command,
-            args=[server_script_path],
-            env=None
+            command=command, args=[server_script_path], env=None
         )
 
-        stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
-        self.stdio, self.write = stdio_transport
-        self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+        try:
+            stdio_transport = await self.exit_stack.enter_async_context(
+                stdio_client(server_params)
+            )
+            read, write = stdio_transport
+            self.session = await self.exit_stack.enter_async_context(
+                ClientSession(read, write)
+            )
+            await self.session.initialize()
 
-        await self.session.initialize()
-
-        # List available tools
-        response = await self.session.list_tools()
-        tools = response.tools
-        print("\nConnected to server with tools:", [tool.name for tool in tools])
+            # Cache tools on connection
+            response = await self.session.list_tools()
+            self.available_tools = [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": tool.name,
+                        "description": tool.description,
+                        "input_schema": tool.inputSchema,
+                    },
+                }
+                for tool in response.tools
+            ]
+            logging.info(
+                f"Connected to server with tools: {[tool['function']['name'] for tool in self.available_tools]}"
+            )
+        except Exception as e:
+            logging.error(f"Failed to connect to server: {e}")
+            await self.cleanup()
+            raise
 
     async def process_query(self, query: str) -> str:
-        """Process a query using LLM and available tools"""
-        system_prompt = (
-            "You are a helpful assistant."
-            "You have the function of online search. "
-            "Please MUST call web_search tool to search the Internet content before answering."
-            "Please do not lose the user's question information when searching,"
-            "and try to maintain the completeness of the question content as much as possible."
-            "When there is a date related question in the user's question,"
-            "please use the search function directly to search and PROHIBIT inserting specific time."
-        )
+        """Process a query using LLM and available tools
+
+        Args:
+            query: The user query to process.
+
+        Returns:
+            The response from the LLM or tool.
+        """
+        if not self.session:
+            raise RuntimeError("Server not connected")
+
         messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": query}
+            {"role": "system", "content": config.SYSTEM_PROMPT},
+            {"role": "user", "content": query},
         ]
 
-        # List available tools
-        response = await self.session.list_tools()
-        available_tools = [{
-            "type": "function",
-            "function": {
-                "name": tool.name,
-                "description": tool.description,
-                "input_schema": tool.inputSchema
-            }
-        } for tool in response.tools]
-
-        # Initial model response
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            tools=available_tools,
-        )
-
-        content = response.choices[0]
-        if content.finish_reason == "tool_calls":
-            # Parse tool call
-            tool_call = content.message.tool_calls[0]
-            tool_name = tool_call.function.name
-            tool_args = json.loads(tool_call.function.arguments)
-
-            # Execute tool
-            result = await self.session.call_tool(tool_name, tool_args)
-            print(f"\n\n[Calling tool {tool_name} with args {tool_args}]\n\n")
-            print(f"[Tool result: {result.content}]")
-
-            # Append tool result to messages
-            messages.append(content.message.model_dump())
-            messages.append({
-                "role": "tool",
-                "content": result.content[0].text,
-                "tool_call_id": tool_call.id,
-            })
-
-            # Generate final response
-            response = self.client.chat.completions.create(
-                model=self.model,
+        try:
+            # Initial model response (only pass tools if available)
+            response = self.client.create_chat_completion(
                 messages=messages,
+                tools=self.available_tools if self.available_tools else None,
             )
-            return response.choices[0].message.content
 
-        return content.message.content
+            if response.finish_reason == "tool_calls":
+                # Parse tool call
+                tool_call = response.message.tool_calls[0]
+                tool_name = tool_call.function.name
+                tool_args = json.loads(tool_call.function.arguments)
+
+                # Execute tool
+                logging.info(f"[Calling tool {tool_name} with args {tool_args}]")
+                result = await self.session.call_tool(tool_name, tool_args)
+                logging.info(f"[Tool result: {result.content}]")
+
+                if not result.content or not isinstance(result.content, list):
+                    raise ValueError("Invalid tool response format")
+
+                # Append tool result to messages
+                messages.append(response.message.model_dump())
+                messages.append(
+                    {
+                        "role": "tool",
+                        "content": result.content[0].text,
+                        "tool_call_id": tool_call.id,
+                    }
+                )
+
+                # Generate final response
+                response = self.client.create_chat_completion(messages=messages)
+
+            return response.message.content
+        except json.JSONDecodeError:
+            logging.error("Failed to parse tool arguments")
+            return "Error: Invalid tool request format."
+        except Exception as e:
+            logging.error(f"Tool execution failed: {e}")
+            return f"Error: {str(e)}"
 
     async def chat_loop(self):
-        """运行交互式聊天循环"""
-        print("\n🤖 MCP 客户端已启动！输入 'quit' 退出")
+        """Interactive chat loop with the user"""
+        logging.info("🤖 MCP Client started! Type 'quit' to exit.")
 
         while True:
             try:
-                query = input("\n你: ").strip()
-                if query.lower() == 'quit':
+                query = input("> ").strip()
+                if query.lower() == "quit":
                     break
 
-                response = await self.process_query(query)  # 发送用户输入到 OpenAI API
-                print(f"\n🤖 OpenAI: {response}")
+                response = await self.process_query(query)
+                logging.info(f"🤖 Assistant: {response}")
 
+            except KeyboardInterrupt:
+                break
             except Exception as e:
-                print(f"\n⚠️ 发生错误: {str(e)}")
+                logging.error(f"⚠️ Error: {str(e)}")
                 import traceback
+
                 traceback.print_exc()
 
     async def cleanup(self):
-        """清理资源"""
+        """Cleanup resources and disconnect session."""
         await self.exit_stack.aclose()
 
 
@@ -150,9 +156,12 @@ async def main():
             "/Users/guodongq/Workspaces/src/github.com/guodongq/quickstart/src/python/app/mcp_quickstart/stdio/server.py",
         )
         await client.chat_loop()
+    except Exception as e:
+        logging.error(f"Fatal error: {e}")
     finally:
         await client.cleanup()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(main())
