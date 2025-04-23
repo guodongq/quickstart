@@ -1,32 +1,58 @@
 import asyncio
-from typing import Optional, Any
+import logging
+from contextlib import asynccontextmanager, AsyncExitStack
+from typing import AsyncGenerator, Any
 
 from mcp import ClientSession
 from mcp.client.sse import sse_client
-import logging
-from langchain_core.tools import BaseTool
+
+from app.mcp_quickstart import TransportStrategy, main
+
+logger = logging.getLogger(__name__)
 
 
-class MCPClient:
-    def __init__(self):
-        self.session: Optional[ClientSession] = None
-
-    async def connect_to_server(
+class SSETransportStrategy(TransportStrategy):
+    def __init__(
             self,
             url: str,
             headers: dict[str, Any] | None = None,
             timeout: float = 5,
             sse_read_timeout: float = 60 * 5,
     ):
-        pass
+        self.url = url
+        self.headers = headers
+        self.timeout = timeout
+        self.sse_read_timeout = sse_read_timeout
 
+    @asynccontextmanager
+    async def create_session(self) -> AsyncGenerator[ClientSession, None]:
+        exit_stack = AsyncExitStack()
+        try:
+            stdio_transport = await exit_stack.enter_async_context(
+                sse_client(
+                    self.url,
+                    self.headers,
+                    self.timeout,
+                    self.sse_read_timeout,
+                )
+            )
+            read, write = stdio_transport
 
-async def main():
-    client = MCPClient()
-    await client.connect_to_server(
-        url="http://localhost:8000/sse",
-    )
+            session = await exit_stack.enter_async_context(
+                ClientSession(read, write)
+            )
+            await session.initialize()
+
+            yield session
+        except Exception as e:
+            logger.error(f"Transport failed: {str(e)}")
+            raise
+        finally:
+            await exit_stack.aclose()
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    transport_strategy = SSETransportStrategy(
+        url="http://localhost:8000/sse",
+    )
+    asyncio.run(main(transport_strategy))
