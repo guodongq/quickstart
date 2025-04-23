@@ -1,14 +1,15 @@
+import asyncio
 from typing import Optional, Any
 
-from mcp import ClientSession, StdioServerParameters
+from mcp import ClientSession
 from mcp.client.sse import sse_client
-from contextlib import AsyncExitStack
+import logging
+from langchain_core.tools import BaseTool
 
 
 class MCPClient:
     def __init__(self):
         self.session: Optional[ClientSession] = None
-        self.exit_stack = AsyncExitStack()
 
     async def connect_to_server(
             self,
@@ -17,15 +18,15 @@ class MCPClient:
             timeout: float = 5,
             sse_read_timeout: float = 60 * 5,
     ):
-        sse_transport = await self.exit_stack.enter_async_context(
-            sse_client(url, headers, timeout, sse_read_timeout)
-        )
-        read, write = sse_transport
-        self.session = await self.exit_stack.enter_async_context(
-            ClientSession(read, write)
-        )
+        pass
 
-        await self.session.initialize()
 
-        response = await self.session.list_tools()
-        print("Connected to server with tools:", [tool.name for tool in response.tools])
+async def main():
+    client = MCPClient()
+    await client.connect_to_server(
+        url="http://localhost:8000/sse",
+    )
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
