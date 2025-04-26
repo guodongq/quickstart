@@ -9,4 +9,6 @@ dependencies = [
     "fastmcp>=2.2.5",
     "mcp>=1.6.0",
     "openai>=1.76.0",
+    "pytest>=8.3.5",
+    "python-socketio>=5.13.0",
 ]
