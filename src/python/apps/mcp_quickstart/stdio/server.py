@@ -6,10 +6,10 @@ mcp = FastMCP("time")
 
 
 @mcp.tool(
-    name="get_current_time_in_timezone",
-    description="Get current time in specified timezone",
+    name="get_current_time",
+    description="Get current time in specified tz",
 )
-def get_current_time_in_timezone(tz: str = "Asia/Shanghai") -> str:
+def get_current_time(tz: str = "Asia/Shanghai") -> str:
     """Get current time in specified timezone"""
     try:
         timezone = ZoneInfo(tz)

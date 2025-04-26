@@ -1,28 +1,43 @@
-from typing import Optional
+import asyncio
+import logging
+from contextlib import AsyncExitStack, asynccontextmanager
+from typing import AsyncGenerator
 
 from mcp import ClientSession
 from mcp.client.websocket import websocket_client
-from contextlib import AsyncExitStack
+
+from apps.mcp_quickstart.openai_client import TransportStrategy, main
+
+logger = logging.getLogger(__name__)
 
 
-class MCPClient:
-    def __init__(self):
-        self.session: Optional[ClientSession] = None
-        self.exit_stack = AsyncExitStack()
+class WebSocketTransportStrategy(TransportStrategy):
+    def __init__(self, url: str = "ws://localhost:8000/mcp"):
+        self.url = url
 
-    async def connect_to_server(
-            self,
-            url: str
-    ):
-        ws_transport = await self.exit_stack.enter_async_context(
-            websocket_client(url)
-        )
-        read, write = ws_transport
-        self.session = await self.exit_stack.enter_async_context(
-            ClientSession(read, write)
-        )
+    @asynccontextmanager
+    async def create_session(self) -> AsyncGenerator[ClientSession, None]:
+        """Create a new session with the server."""
+        exit_stack = AsyncExitStack()
+        try:
+            websocket_transport = await exit_stack.enter_async_context(
+                websocket_client(self.url)
+            )
+            read, write = websocket_transport
 
-        await self.session.initialize()
+            session = await exit_stack.enter_async_context(
+                ClientSession(read, write)
+            )
+            await session.initialize()
 
-        response = await self.session.list_tools()
-        print("Connected to server with tools:", [tool.name for tool in response.tools])
+            yield session
+        except Exception as e:
+            logger.error(f"Transport failed: {str(e)}")
+            raise
+        finally:
+            await exit_stack.aclose()
+
+
+if __name__ == '__main__':
+    transport_strategy = WebSocketTransportStrategy()
+    asyncio.run(main(transport_strategy))

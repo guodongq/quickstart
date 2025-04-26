@@ -5,7 +5,7 @@ from contextlib import AsyncExitStack
 from types import SimpleNamespace
 from typing import List, Dict, Any, AsyncGenerator
 
-from openai import OpenAI
+from openai import OpenAI, AsyncOpenAI
 from mcp import ClientSession
 from contextlib import asynccontextmanager
 
@@ -37,11 +37,20 @@ CONFIG = AppConstants(
     API_KEY="ollama",
     BASE_URL="http://localhost:11434/v1/",
     TIMEOUT=3000,
-    SYSTEM_PROMPT=(
-        "You are a helpful AI assistant. "
-        "When unable to answer user questions from your existing knowledge, don't query the web. "
-        "Instead, directly use available tools to gather context and give more accurate, complete responses."
-    )
+    SYSTEM_PROMPT="""You are an AI assistant integrated with an MCP (Multi-tool Command Protocol) system.
+Your primary role is to help users interact with various tools through the MCP protocol.
+When users request actions like creating folders or files, you should:
+1. Identify the appropriate MCP tool for the task
+2. Use the tool with the correct parameters
+3. Provide feedback about the action's success or failure
+
+For example, if a user asks to create a folder, you should:
+- Use the appropriate MCP file system tool
+- Pass the correct path and parameters
+- Confirm the creation or explain any errors
+
+Always try to understand the user's intent and use the available tools appropriately.
+Respond in a helpful and conversational manner."""
 )
 
 
@@ -52,7 +61,7 @@ class TransportStrategy(ABC):
         yield
 
 
-class MCPClient:
+class OpenAIClient:
     def __init__(self, model: str = "llama3.2:latest"):
         self.model: str = model
         self.client: OpenAI = OpenAI(
@@ -64,7 +73,7 @@ class MCPClient:
         self.exit_stack: AsyncExitStack = AsyncExitStack()
         self.session: ClientSession | None = None
 
-    async def connect_to_server(self, transport_strategy: TransportStrategy):
+    async def connect_to_mcp_server(self, transport_strategy: TransportStrategy):
         self.session = await self.exit_stack.enter_async_context(
             transport_strategy.create_session()
         )
@@ -77,6 +86,11 @@ class MCPClient:
                     "name": tool.name,
                     "description": tool.description,
                     "input_schema": tool.inputSchema,
+                    # "parameters": {
+                    #     "type": "object",
+                    #     "properties": tool.get("parameters", {}),
+                    #     "required": tool.get("required", []),
+                    # }
                 }
             }
             for tool in tool_response.tools
@@ -96,6 +110,7 @@ class MCPClient:
                 model=self.model,
                 messages=messages,
                 tools=self.available_mcp_tools if self.available_mcp_tools else None,
+                tool_choice="auto",
             )
 
             if not response.choices:
@@ -161,9 +176,9 @@ class MCPClient:
 
 
 async def main(transport_strategy: TransportStrategy):
-    client = MCPClient()
+    client = OpenAIClient()
     try:
-        await client.connect_to_server(transport_strategy)
+        await client.connect_to_mcp_server(transport_strategy)
         await client.chat_loop()
     except KeyboardInterrupt:
         logger.info("Exiting...")
