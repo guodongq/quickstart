@@ -6,7 +6,7 @@ from typing import Dict, AsyncGenerator
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-from app.mcp_quickstart import TransportStrategy, main
+from apps.mcp_quickstart.openai_client import TransportStrategy, main
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +53,6 @@ class StdioTransportStrategy(TransportStrategy):
 
 if __name__ == '__main__':
     transport_strategy = StdioTransportStrategy(
-        server_script_path="/Users/guodongq/Workspaces/src/github.com/guodongq/quickstart/src/python/app/mcp_quickstart/stdio/server.py"
+        server_script_path="/Users/guodongq/Workspaces/src/github.com/guodongq/quickstart/src/python/apps/mcp_quickstart/stdio/server.py"
     )
     asyncio.run(main(transport_strategy))

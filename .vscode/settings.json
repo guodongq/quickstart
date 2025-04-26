@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestArgs": [
+        "docs"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.pythonPath": "${workspaceFolder}/src/python/.venv/bin/python",
+}

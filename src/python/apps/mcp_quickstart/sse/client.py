@@ -6,7 +6,7 @@ from typing import AsyncGenerator, Any
 from mcp import ClientSession
 from mcp.client.sse import sse_client
 
-from app.mcp_quickstart import TransportStrategy, main
+from apps.mcp_quickstart.openai_client import TransportStrategy, main
 
 logger = logging.getLogger(__name__)
 

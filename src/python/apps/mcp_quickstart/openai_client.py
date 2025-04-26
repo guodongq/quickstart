@@ -38,9 +38,9 @@ CONFIG = AppConstants(
     BASE_URL="http://localhost:11434/v1/",
     TIMEOUT=3000,
     SYSTEM_PROMPT=(
-        "You are a helpful AI assistant capable of answering user questions."
-        "When necessary, you can use mcp tools to gather additional context "
-        "and provide more accurate, complete responses."
+        "You are a helpful AI assistant. "
+        "When unable to answer user questions from your existing knowledge, don't query the web. "
+        "Instead, directly use available tools to gather context and give more accurate, complete responses."
     )
 )
 

@@ -1,6 +1,6 @@
-from typing import Optional, Any
+from typing import Optional
 
-from mcp import ClientSession, StdioServerParameters
+from mcp import ClientSession
 from mcp.client.websocket import websocket_client
 from contextlib import AsyncExitStack
 

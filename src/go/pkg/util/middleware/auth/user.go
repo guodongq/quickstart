@@ -2,7 +2,7 @@ package auth
 
 import (
 	"context"
-	"github.com/guodongq/quickstart/pkg/middleware/server/httperr"
+	"github.com/guodongq/quickstart/pkg/util/middleware/server/httperr"
 )
 
 type User struct {
