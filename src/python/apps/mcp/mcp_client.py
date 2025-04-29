@@ -3,7 +3,7 @@ from contextlib import AbstractAsyncContextManager
 from pathlib import Path
 from typing import overload, Any, Literal, cast, Union
 
-from apps.mcp_quickstart.transport import ClientTransport, infer_transport
+from apps.mcp.transport import ClientTransport, infer_transport
 from mcp.server.fastmcp import FastMCP
 from pydantic import AnyUrl
 import mcp

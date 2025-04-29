@@ -7,7 +7,7 @@ mcp = FastMCP("time")
 
 @mcp.tool(
     name="get_current_time",
-    description="Get current time in specified timezone",
+    description="Get current time in specified tz",
 )
 def get_current_time(tz: str = "Asia/Shanghai") -> str:
     """Get current time in specified timezone"""

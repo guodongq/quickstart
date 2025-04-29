@@ -1,11 +1,12 @@
 package main
 
 import (
-	cli "github.com/guodongq/quickstart/cmd/cli-quickstart/commands"
-	gogrpc "github.com/guodongq/quickstart/cmd/go-grpc-quickstart/commands"
-	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
+
+	cli "github.com/guodongq/quickstart/cmd/cli/commands"
+	gogrpc "github.com/guodongq/quickstart/cmd/go-grpc/commands"
+	"github.com/spf13/cobra"
 )
 
 const binaryNameEnv = "QUICKSTART_BINARY_NAME"
@@ -19,7 +20,7 @@ func main() {
 	}
 
 	switch binaryName {
-	case "go-grpc-quickstart":
+	case "go-grpc":
 		command = gogrpc.NewCommand()
 	default:
 		command = cli.NewCommand()

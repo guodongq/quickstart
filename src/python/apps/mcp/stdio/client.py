@@ -6,17 +6,17 @@ from typing import Dict, AsyncGenerator
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-from apps.mcp_quickstart.openai_client import TransportStrategy, main
+from apps.mcp.openai_client import TransportStrategy, main
 
 logger = logging.getLogger(__name__)
 
 
 class StdioTransportStrategy(TransportStrategy):
     def __init__(
-            self,
-            command: str = "python",
-            server_script_path: str = None,
-            env: Dict[str, str] | None = None
+        self,
+        command: str = "python",
+        server_script_path: str = None,
+        env: Dict[str, str] | None = None,
     ):
         self.command = command
         self.server_script_path = server_script_path
@@ -38,9 +38,7 @@ class StdioTransportStrategy(TransportStrategy):
             )
             read, write = stdio_transport
 
-            session = await exit_stack.enter_async_context(
-                ClientSession(read, write)
-            )
+            session = await exit_stack.enter_async_context(ClientSession(read, write))
             await session.initialize()
 
             yield session
@@ -51,8 +49,8 @@ class StdioTransportStrategy(TransportStrategy):
             await exit_stack.aclose()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     transport_strategy = StdioTransportStrategy(
-        server_script_path="/Users/guodongq/Workspaces/src/github.com/guodongq/quickstart/src/python/apps/mcp_quickstart/stdio/server.py"
+        server_script_path="/Users/guodongq/Workspaces/src/github.com/guodongq/quickstart/src/python/apps/mcp/stdio/server.py"
     )
     asyncio.run(main(transport_strategy))

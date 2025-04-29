@@ -56,7 +56,7 @@ mcp = SocketIOMCP(
 
 @mcp.tool(
     name="get_current_time",
-    description="Get current time in specified tz",
+    description="Get current time in specified timezone",
 )
 def get_current_time(tz: str = "Asia/Shanghai") -> str:
     """Get current time in specified timezone"""

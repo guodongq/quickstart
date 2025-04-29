@@ -37,19 +37,9 @@ CONFIG = AppConstants(
     API_KEY="ollama",
     BASE_URL="http://localhost:11434/v1/",
     TIMEOUT=3000,
-    SYSTEM_PROMPT="""You are an AI assistant integrated with an MCP (Multi-tool Command Protocol) system.
-Your primary role is to help users interact with various tools through the MCP protocol.
-When users request actions like creating folders or files, you should:
-1. Identify the appropriate MCP tool for the task
-2. Use the tool with the correct parameters
-3. Provide feedback about the action's success or failure
-
-For example, if a user asks to create a folder, you should:
-- Use the appropriate MCP file system tool
-- Pass the correct path and parameters
-- Confirm the creation or explain any errors
-
-Always try to understand the user's intent and use the available tools appropriately.
+    SYSTEM_PROMPT="""You are an smart AI assistant.
+Your responsibility is to answer the questions raised by users.
+Always try to understand the user's intent and use the available LangChain tools appropriately.
 Respond in a helpful and conversational manner."""
 )
 
@@ -121,6 +111,7 @@ class OpenAIClient:
                 # Parse tool call
                 tool_call = content.message.tool_calls[0]
                 tool_name = tool_call.function.name
+                logging.info(f"Need to call tool: {content.message.tool_calls[0].function.name}")
                 try:
                     tool_args = json.loads(tool_call.function.arguments)
                 except json.JSONDecodeError as e:

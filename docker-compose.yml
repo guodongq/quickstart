@@ -1,5 +1,5 @@
 services:
-  go-grpc-quickstart:
+  go-grpc:
     build:
       context: ./src/go
       dockerfile: Dockerfile
@@ -11,4 +11,4 @@ services:
         limits:
           memory: 128M
           cpus: "0.5"
-    command: "go-grpc-quickstart"
+    command: "go-grpc"

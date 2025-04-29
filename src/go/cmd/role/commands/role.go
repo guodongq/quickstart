@@ -2,9 +2,10 @@ package commands
 
 import (
 	_ "context"
-	"github.com/go-chi/chi/v5"
 	//"github.com/guodongq/quickstart/internal/role/ports"
 	//"github.com/guodongq/quickstart/internal/role/service"
+	_ "net/http"
+
 	"github.com/guodongq/quickstart/pkg/util/provider/app"
 	_ "github.com/guodongq/quickstart/pkg/util/provider/chi"
 	"github.com/guodongq/quickstart/pkg/util/provider/logger/logrus"
@@ -12,7 +13,6 @@ import (
 	"github.com/guodongq/quickstart/pkg/util/provider/probes"
 	"github.com/guodongq/quickstart/pkg/util/stack"
 	"github.com/spf13/cobra"
-	_ "net/http"
 )
 
 func NewCommand() *cobra.Command {

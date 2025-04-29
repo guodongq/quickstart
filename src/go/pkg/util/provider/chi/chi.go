@@ -4,15 +4,16 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/guodongq/quickstart/pkg/middleware/requestid"
-	logger "github.com/guodongq/quickstart/pkg/util/log"
-	"github.com/guodongq/quickstart/pkg/util/provider"
 	"io"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	logger "github.com/guodongq/quickstart/pkg/util/log"
+	"github.com/guodongq/quickstart/pkg/util/middleware/requestid"
+	"github.com/guodongq/quickstart/pkg/util/provider"
 )
 
 type ChiEngine struct {
@@ -39,7 +40,7 @@ func New(optionsFuncs ...func(options *ChiOptions)) *ChiEngine {
 func configureMiddlewares(router chi.Router, options *ChiOptions) http.Handler {
 	router.Use(middleware.RequestID)
 	router.Use(middleware.RealIP)
-	//router.Use(logger.NewStructuredLogger(logger.DefaultLogger()))
+	// router.Use(logger.NewStructuredLogger(logger.DefaultLogger()))
 	router.Use(Logger(false))
 	router.Use(middleware.Recoverer)
 	router.Use(
@@ -87,7 +88,7 @@ func (p *ChiEngine) Run() error {
 func Logger(useColor bool) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
-			var buf = &bytes.Buffer{}
+			buf := &bytes.Buffer{}
 			reqID := requestid.Get(r)
 			if reqID != "" {
 				cW(buf, useColor, nYellow, "[%s] ", reqID)
