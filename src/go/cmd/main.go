@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	academy "github.com/guodongq/quickstart/cmd/academy/commands"
 	cli "github.com/guodongq/quickstart/cmd/cli/commands"
 	gogrpc "github.com/guodongq/quickstart/cmd/go-grpc/commands"
 	"github.com/spf13/cobra"
@@ -22,6 +23,8 @@ func main() {
 	switch binaryName {
 	case "go-grpc":
 		command = gogrpc.NewCommand()
+	case "academy":
+		command = academy.NewCommand()
 	default:
 		command = cli.NewCommand()
 	}

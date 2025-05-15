@@ -3,12 +3,13 @@ package mongo
 import (
 	"context"
 	"github.com/guodongq/quickstart/internal/academy/domain/environment"
+	"github.com/guodongq/quickstart/pkg/database/mongo"
 	"github.com/guodongq/quickstart/pkg/provider/mongodb"
 )
 
 type EnvironmentPO struct {
-	BasePO `bson:",inline"`
-	Name   string `bson:"name"`
+	mongo.BasePO `bson:",inline"`
+	Name         string `bson:"name"`
 }
 
 func fromEnvironment(entity *environment.Environment) EnvironmentPO {
@@ -19,15 +20,17 @@ func (e EnvironmentPO) toEnvironment() *environment.Environment {
 	return &environment.Environment{}
 }
 
+const collectionEnvironment = "environment"
+
 type environmentRepository struct {
-	dataStore *MongoRepository[EnvironmentPO]
+	dataStore *mongo.DataStore[EnvironmentPO]
 }
 
 func NewEnvironmentRepository(repoProvider mongodb.MongoRepository) environment.Repository {
 	return &environmentRepository{
-		dataStore: NewMongoDataStore[EnvironmentPO](
+		dataStore: mongo.NewDataStore[EnvironmentPO](
 			repoProvider,
-			collectionProject,
+			collectionEnvironment,
 		),
 	}
 }

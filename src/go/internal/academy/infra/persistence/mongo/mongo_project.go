@@ -3,13 +3,14 @@ package mongo
 import (
 	"context"
 	"github.com/guodongq/quickstart/internal/academy/domain/project"
+	"github.com/guodongq/quickstart/pkg/database/mongo"
 	"github.com/guodongq/quickstart/pkg/idgen"
 	"github.com/guodongq/quickstart/pkg/provider/mongodb"
 )
 
 type ProjectPO struct {
-	BasePO      `bson:",inline"`
-	ProjectName string `bson:"project_name"`
+	mongo.BasePO `bson:",inline"`
+	ProjectName  string `bson:"project_name"`
 }
 
 func fromProject(entity *project.Project) ProjectPO {
@@ -20,13 +21,15 @@ func (p ProjectPO) toProject() *project.Project {
 	return &project.Project{}
 }
 
+const collectionProject = "project"
+
 type projectRepository struct {
-	dataStore *MongoRepository[ProjectPO]
+	dataStore *mongo.DataStore[ProjectPO]
 }
 
 func NewProjectRepository(repoProvider mongodb.MongoRepository) project.Repository {
 	return &projectRepository{
-		dataStore: NewMongoDataStore[ProjectPO](
+		dataStore: mongo.NewDataStore[ProjectPO](
 			repoProvider,
 			collectionProject,
 		),
