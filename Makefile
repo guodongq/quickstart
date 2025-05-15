@@ -21,7 +21,7 @@ openapi-dependencies: ## Install openapi dependencies
 	cd api/openapi && npm install
 
 openapi-generate: ## Generate OpenAPI
-	@./scripts/utils/openapi-http.sh client src/go/internal/genopenapi/server server
+	@./scripts/utils/openapi-http.sh client src/go/internal/genapi/server server
 
 openapi-bundle: openapi-dependencies ## Generate OpenAPI bundle
 	cd api/openapi && npm run bundle -- ${SPEC_FILE} -o ${BUNDLE_PATH}

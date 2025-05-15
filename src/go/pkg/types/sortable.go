@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/guodongq/quickstart/pkg/util/log"
+	"github.com/guodongq/quickstart/pkg/log"
 	"strings"
 )
 

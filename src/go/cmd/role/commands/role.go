@@ -6,12 +6,12 @@ import (
 	//"github.com/guodongq/quickstart/internal/role/service"
 	_ "net/http"
 
-	"github.com/guodongq/quickstart/pkg/util/provider/app"
-	_ "github.com/guodongq/quickstart/pkg/util/provider/chi"
-	"github.com/guodongq/quickstart/pkg/util/provider/logger/logrus"
-	"github.com/guodongq/quickstart/pkg/util/provider/mongodb"
-	"github.com/guodongq/quickstart/pkg/util/provider/probes"
-	"github.com/guodongq/quickstart/pkg/util/stack"
+	"github.com/guodongq/quickstart/pkg/provider/app"
+	_ "github.com/guodongq/quickstart/pkg/provider/chi"
+	"github.com/guodongq/quickstart/pkg/provider/logger/logrus"
+	"github.com/guodongq/quickstart/pkg/provider/mongodb"
+	"github.com/guodongq/quickstart/pkg/provider/probes"
+	"github.com/guodongq/quickstart/pkg/stack"
 	"github.com/spf13/cobra"
 )
 
