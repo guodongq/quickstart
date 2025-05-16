@@ -8,28 +8,28 @@ import (
 	"github.com/guodongq/quickstart/pkg/provider/mongodb"
 )
 
-type ProjectPO struct {
-	mongo.BasePO `bson:",inline"`
-	ProjectName  string `bson:"project_name"`
+type ProjectModel struct {
+	mongo.BaseModel `bson:",inline"`
+	ProjectName     string `bson:"project_name"`
 }
 
-func fromProject(entity *project.Project) ProjectPO {
-	return ProjectPO{}
+func fromProject(entity *project.Project) ProjectModel {
+	return ProjectModel{}
 }
 
-func (p ProjectPO) toProject() *project.Project {
+func (p ProjectModel) toProject() *project.Project {
 	return &project.Project{}
 }
 
 const collectionProject = "project"
 
 type projectRepository struct {
-	dataStore *mongo.DataStore[ProjectPO]
+	dataStore *mongo.DataStore[ProjectModel]
 }
 
 func NewProjectRepository(repoProvider mongodb.MongoRepository) project.Repository {
 	return &projectRepository{
-		dataStore: mongo.NewDataStore[ProjectPO](
+		dataStore: mongo.NewDataStore[ProjectModel](
 			repoProvider,
 			collectionProject,
 		),

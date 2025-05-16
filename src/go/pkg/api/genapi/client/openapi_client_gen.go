@@ -89,81 +89,33 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
-	// ActionsList request
-	ActionsList(ctx context.Context, params *ActionsListParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ProjectsList request
+	ProjectsList(ctx context.Context, params *ProjectsListParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ActionsCreateWithBody request with any body
-	ActionsCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ProjectsCreateWithBody request with any body
+	ProjectsCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	ActionsCreate(ctx context.Context, body ActionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	ProjectsCreate(ctx context.Context, body ProjectsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ActionsDelete request
-	ActionsDelete(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ProjectsDelete request
+	ProjectsDelete(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ActionsGet request
-	ActionsGet(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ProjectsGet request
+	ProjectsGet(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ActionsPatchWithBody request with any body
-	ActionsPatchWithBody(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ProjectsPatchWithBody request with any body
+	ProjectsPatchWithBody(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	ActionsPatch(ctx context.Context, actionId ActionId, body ActionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	ProjectsPatch(ctx context.Context, projectId ProjectId, body ProjectsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ActionsUpdateWithBody request with any body
-	ActionsUpdateWithBody(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ProjectsUpdateWithBody request with any body
+	ProjectsUpdateWithBody(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	ActionsUpdate(ctx context.Context, actionId ActionId, body ActionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PermissionsList request
-	PermissionsList(ctx context.Context, params *PermissionsListParams, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PermissionsCreateWithBody request with any body
-	PermissionsCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PermissionsCreate(ctx context.Context, body PermissionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PermissionsDelete request
-	PermissionsDelete(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PermissionsGet request
-	PermissionsGet(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PermissionsPatchWithBody request with any body
-	PermissionsPatchWithBody(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PermissionsPatch(ctx context.Context, permissionId PermissionId, body PermissionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PermissionsUpdateWithBody request with any body
-	PermissionsUpdateWithBody(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	PermissionsUpdate(ctx context.Context, permissionId PermissionId, body PermissionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// RolesList request
-	RolesList(ctx context.Context, params *RolesListParams, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// RolesCreateWithBody request with any body
-	RolesCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	RolesCreate(ctx context.Context, body RolesCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// RolesDelete request
-	RolesDelete(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// RolesGet request
-	RolesGet(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// RolesPatchWithBody request with any body
-	RolesPatchWithBody(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	RolesPatch(ctx context.Context, roleId RoleId, body RolesPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// RolesUpdateWithBody request with any body
-	RolesUpdateWithBody(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	RolesUpdate(ctx context.Context, roleId RoleId, body RolesUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	ProjectsUpdate(ctx context.Context, projectId ProjectId, body ProjectsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-func (c *Client) ActionsList(ctx context.Context, params *ActionsListParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsListRequest(c.Server, params)
+func (c *Client) ProjectsList(ctx context.Context, params *ProjectsListParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsListRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -174,8 +126,8 @@ func (c *Client) ActionsList(ctx context.Context, params *ActionsListParams, req
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsCreateRequestWithBody(c.Server, contentType, body)
+func (c *Client) ProjectsCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsCreateRequestWithBody(c.Server, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -186,8 +138,8 @@ func (c *Client) ActionsCreateWithBody(ctx context.Context, contentType string, 
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsCreate(ctx context.Context, body ActionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsCreateRequest(c.Server, body)
+func (c *Client) ProjectsCreate(ctx context.Context, body ProjectsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsCreateRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -198,8 +150,8 @@ func (c *Client) ActionsCreate(ctx context.Context, body ActionsCreateJSONReques
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsDelete(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsDeleteRequest(c.Server, actionId)
+func (c *Client) ProjectsDelete(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsDeleteRequest(c.Server, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -210,8 +162,8 @@ func (c *Client) ActionsDelete(ctx context.Context, actionId ActionId, reqEditor
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsGet(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsGetRequest(c.Server, actionId)
+func (c *Client) ProjectsGet(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsGetRequest(c.Server, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -222,8 +174,8 @@ func (c *Client) ActionsGet(ctx context.Context, actionId ActionId, reqEditors .
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsPatchWithBody(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsPatchRequestWithBody(c.Server, actionId, contentType, body)
+func (c *Client) ProjectsPatchWithBody(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsPatchRequestWithBody(c.Server, projectId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -234,8 +186,8 @@ func (c *Client) ActionsPatchWithBody(ctx context.Context, actionId ActionId, co
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsPatch(ctx context.Context, actionId ActionId, body ActionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsPatchRequest(c.Server, actionId, body)
+func (c *Client) ProjectsPatch(ctx context.Context, projectId ProjectId, body ProjectsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsPatchRequest(c.Server, projectId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -246,8 +198,8 @@ func (c *Client) ActionsPatch(ctx context.Context, actionId ActionId, body Actio
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsUpdateWithBody(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsUpdateRequestWithBody(c.Server, actionId, contentType, body)
+func (c *Client) ProjectsUpdateWithBody(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsUpdateRequestWithBody(c.Server, projectId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -258,8 +210,8 @@ func (c *Client) ActionsUpdateWithBody(ctx context.Context, actionId ActionId, c
 	return c.Client.Do(req)
 }
 
-func (c *Client) ActionsUpdate(ctx context.Context, actionId ActionId, body ActionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewActionsUpdateRequest(c.Server, actionId, body)
+func (c *Client) ProjectsUpdate(ctx context.Context, projectId ProjectId, body ProjectsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectsUpdateRequest(c.Server, projectId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -270,224 +222,8 @@ func (c *Client) ActionsUpdate(ctx context.Context, actionId ActionId, body Acti
 	return c.Client.Do(req)
 }
 
-func (c *Client) PermissionsList(ctx context.Context, params *PermissionsListParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsListRequest(c.Server, params)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsCreateRequestWithBody(c.Server, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsCreate(ctx context.Context, body PermissionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsCreateRequest(c.Server, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsDelete(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsDeleteRequest(c.Server, permissionId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsGet(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsGetRequest(c.Server, permissionId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsPatchWithBody(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsPatchRequestWithBody(c.Server, permissionId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsPatch(ctx context.Context, permissionId PermissionId, body PermissionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsPatchRequest(c.Server, permissionId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsUpdateWithBody(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsUpdateRequestWithBody(c.Server, permissionId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) PermissionsUpdate(ctx context.Context, permissionId PermissionId, body PermissionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPermissionsUpdateRequest(c.Server, permissionId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesList(ctx context.Context, params *RolesListParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesListRequest(c.Server, params)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesCreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesCreateRequestWithBody(c.Server, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesCreate(ctx context.Context, body RolesCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesCreateRequest(c.Server, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesDelete(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesDeleteRequest(c.Server, roleId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesGet(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesGetRequest(c.Server, roleId)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesPatchWithBody(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesPatchRequestWithBody(c.Server, roleId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesPatch(ctx context.Context, roleId RoleId, body RolesPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesPatchRequest(c.Server, roleId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesUpdateWithBody(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesUpdateRequestWithBody(c.Server, roleId, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) RolesUpdate(ctx context.Context, roleId RoleId, body RolesUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewRolesUpdateRequest(c.Server, roleId, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-// NewActionsListRequest generates requests for ActionsList
-func NewActionsListRequest(server string, params *ActionsListParams) (*http.Request, error) {
+// NewProjectsListRequest generates requests for ProjectsList
+func NewProjectsListRequest(server string, params *ProjectsListParams) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -495,7 +231,7 @@ func NewActionsListRequest(server string, params *ActionsListParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/v1/actions")
+	operationPath := fmt.Sprintf("/v1/projects")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -547,19 +283,19 @@ func NewActionsListRequest(server string, params *ActionsListParams) (*http.Requ
 	return req, nil
 }
 
-// NewActionsCreateRequest calls the generic ActionsCreate builder with application/json body
-func NewActionsCreateRequest(server string, body ActionsCreateJSONRequestBody) (*http.Request, error) {
+// NewProjectsCreateRequest calls the generic ProjectsCreate builder with application/json body
+func NewProjectsCreateRequest(server string, body ProjectsCreateJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewActionsCreateRequestWithBody(server, "application/json", bodyReader)
+	return NewProjectsCreateRequestWithBody(server, "application/json", bodyReader)
 }
 
-// NewActionsCreateRequestWithBody generates requests for ActionsCreate with any type of body
-func NewActionsCreateRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+// NewProjectsCreateRequestWithBody generates requests for ProjectsCreate with any type of body
+func NewProjectsCreateRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -567,7 +303,7 @@ func NewActionsCreateRequestWithBody(server string, contentType string, body io.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/v1/actions")
+	operationPath := fmt.Sprintf("/v1/projects")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -587,13 +323,13 @@ func NewActionsCreateRequestWithBody(server string, contentType string, body io.
 	return req, nil
 }
 
-// NewActionsDeleteRequest generates requests for ActionsDelete
-func NewActionsDeleteRequest(server string, actionId ActionId) (*http.Request, error) {
+// NewProjectsDeleteRequest generates requests for ProjectsDelete
+func NewProjectsDeleteRequest(server string, projectId ProjectId) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
 
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "action_id", runtime.ParamLocationPath, actionId)
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "project_id", runtime.ParamLocationPath, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -603,7 +339,7 @@ func NewActionsDeleteRequest(server string, actionId ActionId) (*http.Request, e
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/v1/actions/%s", pathParam0)
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -621,13 +357,13 @@ func NewActionsDeleteRequest(server string, actionId ActionId) (*http.Request, e
 	return req, nil
 }
 
-// NewActionsGetRequest generates requests for ActionsGet
-func NewActionsGetRequest(server string, actionId ActionId) (*http.Request, error) {
+// NewProjectsGetRequest generates requests for ProjectsGet
+func NewProjectsGetRequest(server string, projectId ProjectId) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
 
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "action_id", runtime.ParamLocationPath, actionId)
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "project_id", runtime.ParamLocationPath, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -637,7 +373,7 @@ func NewActionsGetRequest(server string, actionId ActionId) (*http.Request, erro
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/v1/actions/%s", pathParam0)
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -655,24 +391,24 @@ func NewActionsGetRequest(server string, actionId ActionId) (*http.Request, erro
 	return req, nil
 }
 
-// NewActionsPatchRequest calls the generic ActionsPatch builder with application/json body
-func NewActionsPatchRequest(server string, actionId ActionId, body ActionsPatchJSONRequestBody) (*http.Request, error) {
+// NewProjectsPatchRequest calls the generic ProjectsPatch builder with application/json body
+func NewProjectsPatchRequest(server string, projectId ProjectId, body ProjectsPatchJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewActionsPatchRequestWithBody(server, actionId, "application/json", bodyReader)
+	return NewProjectsPatchRequestWithBody(server, projectId, "application/json", bodyReader)
 }
 
-// NewActionsPatchRequestWithBody generates requests for ActionsPatch with any type of body
-func NewActionsPatchRequestWithBody(server string, actionId ActionId, contentType string, body io.Reader) (*http.Request, error) {
+// NewProjectsPatchRequestWithBody generates requests for ProjectsPatch with any type of body
+func NewProjectsPatchRequestWithBody(server string, projectId ProjectId, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
 
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "action_id", runtime.ParamLocationPath, actionId)
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "project_id", runtime.ParamLocationPath, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -682,7 +418,7 @@ func NewActionsPatchRequestWithBody(server string, actionId ActionId, contentTyp
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/v1/actions/%s", pathParam0)
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -702,24 +438,24 @@ func NewActionsPatchRequestWithBody(server string, actionId ActionId, contentTyp
 	return req, nil
 }
 
-// NewActionsUpdateRequest calls the generic ActionsUpdate builder with application/json body
-func NewActionsUpdateRequest(server string, actionId ActionId, body ActionsUpdateJSONRequestBody) (*http.Request, error) {
+// NewProjectsUpdateRequest calls the generic ProjectsUpdate builder with application/json body
+func NewProjectsUpdateRequest(server string, projectId ProjectId, body ProjectsUpdateJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewActionsUpdateRequestWithBody(server, actionId, "application/json", bodyReader)
+	return NewProjectsUpdateRequestWithBody(server, projectId, "application/json", bodyReader)
 }
 
-// NewActionsUpdateRequestWithBody generates requests for ActionsUpdate with any type of body
-func NewActionsUpdateRequestWithBody(server string, actionId ActionId, contentType string, body io.Reader) (*http.Request, error) {
+// NewProjectsUpdateRequestWithBody generates requests for ProjectsUpdate with any type of body
+func NewProjectsUpdateRequestWithBody(server string, projectId ProjectId, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
 
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "action_id", runtime.ParamLocationPath, actionId)
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "project_id", runtime.ParamLocationPath, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -729,533 +465,7 @@ func NewActionsUpdateRequestWithBody(server string, actionId ActionId, contentTy
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/v1/actions/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PUT", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewPermissionsListRequest generates requests for PermissionsList
-func NewPermissionsListRequest(server string, params *PermissionsListParams) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/permissions")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	if params != nil {
-		queryValues := queryURL.Query()
-
-		if params.Pageable != nil {
-
-			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "pageable", runtime.ParamLocationQuery, *params.Pageable); err != nil {
-				return nil, err
-			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-				return nil, err
-			} else {
-				for k, v := range parsed {
-					for _, v2 := range v {
-						queryValues.Add(k, v2)
-					}
-				}
-			}
-
-		}
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "searchFilter", runtime.ParamLocationQuery, params.SearchFilter); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
-				}
-			}
-		}
-
-		queryURL.RawQuery = queryValues.Encode()
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPermissionsCreateRequest calls the generic PermissionsCreate builder with application/json body
-func NewPermissionsCreateRequest(server string, body PermissionsCreateJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPermissionsCreateRequestWithBody(server, "application/json", bodyReader)
-}
-
-// NewPermissionsCreateRequestWithBody generates requests for PermissionsCreate with any type of body
-func NewPermissionsCreateRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/permissions")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewPermissionsDeleteRequest generates requests for PermissionsDelete
-func NewPermissionsDeleteRequest(server string, permissionId PermissionId) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "permission_id", runtime.ParamLocationPath, permissionId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/permissions/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPermissionsGetRequest generates requests for PermissionsGet
-func NewPermissionsGetRequest(server string, permissionId PermissionId) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "permission_id", runtime.ParamLocationPath, permissionId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/permissions/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewPermissionsPatchRequest calls the generic PermissionsPatch builder with application/json body
-func NewPermissionsPatchRequest(server string, permissionId PermissionId, body PermissionsPatchJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPermissionsPatchRequestWithBody(server, permissionId, "application/json", bodyReader)
-}
-
-// NewPermissionsPatchRequestWithBody generates requests for PermissionsPatch with any type of body
-func NewPermissionsPatchRequestWithBody(server string, permissionId PermissionId, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "permission_id", runtime.ParamLocationPath, permissionId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/permissions/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PATCH", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewPermissionsUpdateRequest calls the generic PermissionsUpdate builder with application/json body
-func NewPermissionsUpdateRequest(server string, permissionId PermissionId, body PermissionsUpdateJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPermissionsUpdateRequestWithBody(server, permissionId, "application/json", bodyReader)
-}
-
-// NewPermissionsUpdateRequestWithBody generates requests for PermissionsUpdate with any type of body
-func NewPermissionsUpdateRequestWithBody(server string, permissionId PermissionId, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "permission_id", runtime.ParamLocationPath, permissionId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/permissions/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PUT", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewRolesListRequest generates requests for RolesList
-func NewRolesListRequest(server string, params *RolesListParams) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/roles")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	if params != nil {
-		queryValues := queryURL.Query()
-
-		if params.Pageable != nil {
-
-			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "pageable", runtime.ParamLocationQuery, *params.Pageable); err != nil {
-				return nil, err
-			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-				return nil, err
-			} else {
-				for k, v := range parsed {
-					for _, v2 := range v {
-						queryValues.Add(k, v2)
-					}
-				}
-			}
-
-		}
-
-		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "searchFilter", runtime.ParamLocationQuery, params.SearchFilter); err != nil {
-			return nil, err
-		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
-			return nil, err
-		} else {
-			for k, v := range parsed {
-				for _, v2 := range v {
-					queryValues.Add(k, v2)
-				}
-			}
-		}
-
-		queryURL.RawQuery = queryValues.Encode()
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewRolesCreateRequest calls the generic RolesCreate builder with application/json body
-func NewRolesCreateRequest(server string, body RolesCreateJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewRolesCreateRequestWithBody(server, "application/json", bodyReader)
-}
-
-// NewRolesCreateRequestWithBody generates requests for RolesCreate with any type of body
-func NewRolesCreateRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/roles")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("POST", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewRolesDeleteRequest generates requests for RolesDelete
-func NewRolesDeleteRequest(server string, roleId RoleId) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "role_id", runtime.ParamLocationPath, roleId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/roles/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewRolesGetRequest generates requests for RolesGet
-func NewRolesGetRequest(server string, roleId RoleId) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "role_id", runtime.ParamLocationPath, roleId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/roles/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewRolesPatchRequest calls the generic RolesPatch builder with application/json body
-func NewRolesPatchRequest(server string, roleId RoleId, body RolesPatchJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewRolesPatchRequestWithBody(server, roleId, "application/json", bodyReader)
-}
-
-// NewRolesPatchRequestWithBody generates requests for RolesPatch with any type of body
-func NewRolesPatchRequestWithBody(server string, roleId RoleId, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "role_id", runtime.ParamLocationPath, roleId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/roles/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest("PATCH", queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
-// NewRolesUpdateRequest calls the generic RolesUpdate builder with application/json body
-func NewRolesUpdateRequest(server string, roleId RoleId, body RolesUpdateJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewRolesUpdateRequestWithBody(server, roleId, "application/json", bodyReader)
-}
-
-// NewRolesUpdateRequestWithBody generates requests for RolesUpdate with any type of body
-func NewRolesUpdateRequestWithBody(server string, roleId RoleId, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "role_id", runtime.ParamLocationPath, roleId)
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/roles/%s", pathParam0)
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1318,83 +528,35 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// ActionsListWithResponse request
-	ActionsListWithResponse(ctx context.Context, params *ActionsListParams, reqEditors ...RequestEditorFn) (*ActionsListResponse, error)
+	// ProjectsListWithResponse request
+	ProjectsListWithResponse(ctx context.Context, params *ProjectsListParams, reqEditors ...RequestEditorFn) (*ProjectsListResponse, error)
 
-	// ActionsCreateWithBodyWithResponse request with any body
-	ActionsCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ActionsCreateResponse, error)
+	// ProjectsCreateWithBodyWithResponse request with any body
+	ProjectsCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ProjectsCreateResponse, error)
 
-	ActionsCreateWithResponse(ctx context.Context, body ActionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ActionsCreateResponse, error)
+	ProjectsCreateWithResponse(ctx context.Context, body ProjectsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ProjectsCreateResponse, error)
 
-	// ActionsDeleteWithResponse request
-	ActionsDeleteWithResponse(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*ActionsDeleteResponse, error)
+	// ProjectsDeleteWithResponse request
+	ProjectsDeleteWithResponse(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*ProjectsDeleteResponse, error)
 
-	// ActionsGetWithResponse request
-	ActionsGetWithResponse(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*ActionsGetResponse, error)
+	// ProjectsGetWithResponse request
+	ProjectsGetWithResponse(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*ProjectsGetResponse, error)
 
-	// ActionsPatchWithBodyWithResponse request with any body
-	ActionsPatchWithBodyWithResponse(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ActionsPatchResponse, error)
+	// ProjectsPatchWithBodyWithResponse request with any body
+	ProjectsPatchWithBodyWithResponse(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ProjectsPatchResponse, error)
 
-	ActionsPatchWithResponse(ctx context.Context, actionId ActionId, body ActionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*ActionsPatchResponse, error)
+	ProjectsPatchWithResponse(ctx context.Context, projectId ProjectId, body ProjectsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*ProjectsPatchResponse, error)
 
-	// ActionsUpdateWithBodyWithResponse request with any body
-	ActionsUpdateWithBodyWithResponse(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ActionsUpdateResponse, error)
+	// ProjectsUpdateWithBodyWithResponse request with any body
+	ProjectsUpdateWithBodyWithResponse(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ProjectsUpdateResponse, error)
 
-	ActionsUpdateWithResponse(ctx context.Context, actionId ActionId, body ActionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ActionsUpdateResponse, error)
-
-	// PermissionsListWithResponse request
-	PermissionsListWithResponse(ctx context.Context, params *PermissionsListParams, reqEditors ...RequestEditorFn) (*PermissionsListResponse, error)
-
-	// PermissionsCreateWithBodyWithResponse request with any body
-	PermissionsCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PermissionsCreateResponse, error)
-
-	PermissionsCreateWithResponse(ctx context.Context, body PermissionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*PermissionsCreateResponse, error)
-
-	// PermissionsDeleteWithResponse request
-	PermissionsDeleteWithResponse(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*PermissionsDeleteResponse, error)
-
-	// PermissionsGetWithResponse request
-	PermissionsGetWithResponse(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*PermissionsGetResponse, error)
-
-	// PermissionsPatchWithBodyWithResponse request with any body
-	PermissionsPatchWithBodyWithResponse(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PermissionsPatchResponse, error)
-
-	PermissionsPatchWithResponse(ctx context.Context, permissionId PermissionId, body PermissionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*PermissionsPatchResponse, error)
-
-	// PermissionsUpdateWithBodyWithResponse request with any body
-	PermissionsUpdateWithBodyWithResponse(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PermissionsUpdateResponse, error)
-
-	PermissionsUpdateWithResponse(ctx context.Context, permissionId PermissionId, body PermissionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*PermissionsUpdateResponse, error)
-
-	// RolesListWithResponse request
-	RolesListWithResponse(ctx context.Context, params *RolesListParams, reqEditors ...RequestEditorFn) (*RolesListResponse, error)
-
-	// RolesCreateWithBodyWithResponse request with any body
-	RolesCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RolesCreateResponse, error)
-
-	RolesCreateWithResponse(ctx context.Context, body RolesCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*RolesCreateResponse, error)
-
-	// RolesDeleteWithResponse request
-	RolesDeleteWithResponse(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*RolesDeleteResponse, error)
-
-	// RolesGetWithResponse request
-	RolesGetWithResponse(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*RolesGetResponse, error)
-
-	// RolesPatchWithBodyWithResponse request with any body
-	RolesPatchWithBodyWithResponse(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RolesPatchResponse, error)
-
-	RolesPatchWithResponse(ctx context.Context, roleId RoleId, body RolesPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*RolesPatchResponse, error)
-
-	// RolesUpdateWithBodyWithResponse request with any body
-	RolesUpdateWithBodyWithResponse(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RolesUpdateResponse, error)
-
-	RolesUpdateWithResponse(ctx context.Context, roleId RoleId, body RolesUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*RolesUpdateResponse, error)
+	ProjectsUpdateWithResponse(ctx context.Context, projectId ProjectId, body ProjectsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ProjectsUpdateResponse, error)
 }
 
-type ActionsListResponse struct {
+type ProjectsListResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *ActionsList
+	JSON200      *ProjectsList
 	JSON401      *Unauthorized
 	JSON403      *Forbidden
 	JSON429      *TooManyRequests
@@ -1403,7 +565,7 @@ type ActionsListResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ActionsListResponse) Status() string {
+func (r ProjectsListResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1411,17 +573,17 @@ func (r ActionsListResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ActionsListResponse) StatusCode() int {
+func (r ProjectsListResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type ActionsCreateResponse struct {
+type ProjectsCreateResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON201      *ExistingAction
+	JSON201      *ExistingProject
 	JSON401      *Unauthorized
 	JSON403      *Forbidden
 	JSON429      *TooManyRequests
@@ -1430,7 +592,7 @@ type ActionsCreateResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ActionsCreateResponse) Status() string {
+func (r ProjectsCreateResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1438,14 +600,14 @@ func (r ActionsCreateResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ActionsCreateResponse) StatusCode() int {
+func (r ProjectsCreateResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type ActionsDeleteResponse struct {
+type ProjectsDeleteResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON401      *Unauthorized
@@ -1458,7 +620,7 @@ type ActionsDeleteResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ActionsDeleteResponse) Status() string {
+func (r ProjectsDeleteResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1466,17 +628,17 @@ func (r ActionsDeleteResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ActionsDeleteResponse) StatusCode() int {
+func (r ProjectsDeleteResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type ActionsGetResponse struct {
+type ProjectsGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *ExistingAction
+	JSON200      *ExistingProject
 	JSON401      *Unauthorized
 	JSON403      *Forbidden
 	JSON404      *NotFound
@@ -1486,7 +648,7 @@ type ActionsGetResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ActionsGetResponse) Status() string {
+func (r ProjectsGetResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1494,17 +656,17 @@ func (r ActionsGetResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ActionsGetResponse) StatusCode() int {
+func (r ProjectsGetResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type ActionsPatchResponse struct {
+type ProjectsPatchResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *ExistingAction
+	JSON200      *ExistingProject
 	JSON401      *Unauthorized
 	JSON403      *Forbidden
 	JSON404      *NotFound
@@ -1514,7 +676,7 @@ type ActionsPatchResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ActionsPatchResponse) Status() string {
+func (r ProjectsPatchResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1522,17 +684,17 @@ func (r ActionsPatchResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ActionsPatchResponse) StatusCode() int {
+func (r ProjectsPatchResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type ActionsUpdateResponse struct {
+type ProjectsUpdateResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *ExistingAction
+	JSON200      *ExistingProject
 	JSON401      *Unauthorized
 	JSON403      *Forbidden
 	JSON404      *NotFound
@@ -1542,7 +704,7 @@ type ActionsUpdateResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r ActionsUpdateResponse) Status() string {
+func (r ProjectsUpdateResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1550,595 +712,107 @@ func (r ActionsUpdateResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r ActionsUpdateResponse) StatusCode() int {
+func (r ProjectsUpdateResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type PermissionsListResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *PermissionsList
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r PermissionsListResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PermissionsListResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PermissionsCreateResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON201      *ExistingPermission
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r PermissionsCreateResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PermissionsCreateResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PermissionsDeleteResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON412      *PreconditionFailed
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r PermissionsDeleteResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PermissionsDeleteResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PermissionsGetResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExistingPermission
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r PermissionsGetResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PermissionsGetResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PermissionsPatchResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExistingPermission
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r PermissionsPatchResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PermissionsPatchResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type PermissionsUpdateResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExistingPermission
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r PermissionsUpdateResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PermissionsUpdateResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type RolesListResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *RolesList
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r RolesListResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r RolesListResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type RolesCreateResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON201      *ExistingRole
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r RolesCreateResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r RolesCreateResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type RolesDeleteResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON412      *PreconditionFailed
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r RolesDeleteResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r RolesDeleteResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type RolesGetResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExistingRole
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r RolesGetResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r RolesGetResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type RolesPatchResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExistingRole
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r RolesPatchResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r RolesPatchResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-type RolesUpdateResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	JSON200      *ExistingRole
-	JSON401      *Unauthorized
-	JSON403      *Forbidden
-	JSON404      *NotFound
-	JSON429      *TooManyRequests
-	JSON500      *ServerError
-	JSONDefault  *UnexpectedError
-}
-
-// Status returns HTTPResponse.Status
-func (r RolesUpdateResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r RolesUpdateResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-// ActionsListWithResponse request returning *ActionsListResponse
-func (c *ClientWithResponses) ActionsListWithResponse(ctx context.Context, params *ActionsListParams, reqEditors ...RequestEditorFn) (*ActionsListResponse, error) {
-	rsp, err := c.ActionsList(ctx, params, reqEditors...)
+// ProjectsListWithResponse request returning *ProjectsListResponse
+func (c *ClientWithResponses) ProjectsListWithResponse(ctx context.Context, params *ProjectsListParams, reqEditors ...RequestEditorFn) (*ProjectsListResponse, error) {
+	rsp, err := c.ProjectsList(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsListResponse(rsp)
+	return ParseProjectsListResponse(rsp)
 }
 
-// ActionsCreateWithBodyWithResponse request with arbitrary body returning *ActionsCreateResponse
-func (c *ClientWithResponses) ActionsCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ActionsCreateResponse, error) {
-	rsp, err := c.ActionsCreateWithBody(ctx, contentType, body, reqEditors...)
+// ProjectsCreateWithBodyWithResponse request with arbitrary body returning *ProjectsCreateResponse
+func (c *ClientWithResponses) ProjectsCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ProjectsCreateResponse, error) {
+	rsp, err := c.ProjectsCreateWithBody(ctx, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsCreateResponse(rsp)
+	return ParseProjectsCreateResponse(rsp)
 }
 
-func (c *ClientWithResponses) ActionsCreateWithResponse(ctx context.Context, body ActionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ActionsCreateResponse, error) {
-	rsp, err := c.ActionsCreate(ctx, body, reqEditors...)
+func (c *ClientWithResponses) ProjectsCreateWithResponse(ctx context.Context, body ProjectsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ProjectsCreateResponse, error) {
+	rsp, err := c.ProjectsCreate(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsCreateResponse(rsp)
+	return ParseProjectsCreateResponse(rsp)
 }
 
-// ActionsDeleteWithResponse request returning *ActionsDeleteResponse
-func (c *ClientWithResponses) ActionsDeleteWithResponse(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*ActionsDeleteResponse, error) {
-	rsp, err := c.ActionsDelete(ctx, actionId, reqEditors...)
+// ProjectsDeleteWithResponse request returning *ProjectsDeleteResponse
+func (c *ClientWithResponses) ProjectsDeleteWithResponse(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*ProjectsDeleteResponse, error) {
+	rsp, err := c.ProjectsDelete(ctx, projectId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsDeleteResponse(rsp)
+	return ParseProjectsDeleteResponse(rsp)
 }
 
-// ActionsGetWithResponse request returning *ActionsGetResponse
-func (c *ClientWithResponses) ActionsGetWithResponse(ctx context.Context, actionId ActionId, reqEditors ...RequestEditorFn) (*ActionsGetResponse, error) {
-	rsp, err := c.ActionsGet(ctx, actionId, reqEditors...)
+// ProjectsGetWithResponse request returning *ProjectsGetResponse
+func (c *ClientWithResponses) ProjectsGetWithResponse(ctx context.Context, projectId ProjectId, reqEditors ...RequestEditorFn) (*ProjectsGetResponse, error) {
+	rsp, err := c.ProjectsGet(ctx, projectId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsGetResponse(rsp)
+	return ParseProjectsGetResponse(rsp)
 }
 
-// ActionsPatchWithBodyWithResponse request with arbitrary body returning *ActionsPatchResponse
-func (c *ClientWithResponses) ActionsPatchWithBodyWithResponse(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ActionsPatchResponse, error) {
-	rsp, err := c.ActionsPatchWithBody(ctx, actionId, contentType, body, reqEditors...)
+// ProjectsPatchWithBodyWithResponse request with arbitrary body returning *ProjectsPatchResponse
+func (c *ClientWithResponses) ProjectsPatchWithBodyWithResponse(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ProjectsPatchResponse, error) {
+	rsp, err := c.ProjectsPatchWithBody(ctx, projectId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsPatchResponse(rsp)
+	return ParseProjectsPatchResponse(rsp)
 }
 
-func (c *ClientWithResponses) ActionsPatchWithResponse(ctx context.Context, actionId ActionId, body ActionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*ActionsPatchResponse, error) {
-	rsp, err := c.ActionsPatch(ctx, actionId, body, reqEditors...)
+func (c *ClientWithResponses) ProjectsPatchWithResponse(ctx context.Context, projectId ProjectId, body ProjectsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*ProjectsPatchResponse, error) {
+	rsp, err := c.ProjectsPatch(ctx, projectId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsPatchResponse(rsp)
+	return ParseProjectsPatchResponse(rsp)
 }
 
-// ActionsUpdateWithBodyWithResponse request with arbitrary body returning *ActionsUpdateResponse
-func (c *ClientWithResponses) ActionsUpdateWithBodyWithResponse(ctx context.Context, actionId ActionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ActionsUpdateResponse, error) {
-	rsp, err := c.ActionsUpdateWithBody(ctx, actionId, contentType, body, reqEditors...)
+// ProjectsUpdateWithBodyWithResponse request with arbitrary body returning *ProjectsUpdateResponse
+func (c *ClientWithResponses) ProjectsUpdateWithBodyWithResponse(ctx context.Context, projectId ProjectId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ProjectsUpdateResponse, error) {
+	rsp, err := c.ProjectsUpdateWithBody(ctx, projectId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsUpdateResponse(rsp)
+	return ParseProjectsUpdateResponse(rsp)
 }
 
-func (c *ClientWithResponses) ActionsUpdateWithResponse(ctx context.Context, actionId ActionId, body ActionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ActionsUpdateResponse, error) {
-	rsp, err := c.ActionsUpdate(ctx, actionId, body, reqEditors...)
+func (c *ClientWithResponses) ProjectsUpdateWithResponse(ctx context.Context, projectId ProjectId, body ProjectsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ProjectsUpdateResponse, error) {
+	rsp, err := c.ProjectsUpdate(ctx, projectId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseActionsUpdateResponse(rsp)
+	return ParseProjectsUpdateResponse(rsp)
 }
 
-// PermissionsListWithResponse request returning *PermissionsListResponse
-func (c *ClientWithResponses) PermissionsListWithResponse(ctx context.Context, params *PermissionsListParams, reqEditors ...RequestEditorFn) (*PermissionsListResponse, error) {
-	rsp, err := c.PermissionsList(ctx, params, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsListResponse(rsp)
-}
-
-// PermissionsCreateWithBodyWithResponse request with arbitrary body returning *PermissionsCreateResponse
-func (c *ClientWithResponses) PermissionsCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PermissionsCreateResponse, error) {
-	rsp, err := c.PermissionsCreateWithBody(ctx, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsCreateResponse(rsp)
-}
-
-func (c *ClientWithResponses) PermissionsCreateWithResponse(ctx context.Context, body PermissionsCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*PermissionsCreateResponse, error) {
-	rsp, err := c.PermissionsCreate(ctx, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsCreateResponse(rsp)
-}
-
-// PermissionsDeleteWithResponse request returning *PermissionsDeleteResponse
-func (c *ClientWithResponses) PermissionsDeleteWithResponse(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*PermissionsDeleteResponse, error) {
-	rsp, err := c.PermissionsDelete(ctx, permissionId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsDeleteResponse(rsp)
-}
-
-// PermissionsGetWithResponse request returning *PermissionsGetResponse
-func (c *ClientWithResponses) PermissionsGetWithResponse(ctx context.Context, permissionId PermissionId, reqEditors ...RequestEditorFn) (*PermissionsGetResponse, error) {
-	rsp, err := c.PermissionsGet(ctx, permissionId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsGetResponse(rsp)
-}
-
-// PermissionsPatchWithBodyWithResponse request with arbitrary body returning *PermissionsPatchResponse
-func (c *ClientWithResponses) PermissionsPatchWithBodyWithResponse(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PermissionsPatchResponse, error) {
-	rsp, err := c.PermissionsPatchWithBody(ctx, permissionId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsPatchResponse(rsp)
-}
-
-func (c *ClientWithResponses) PermissionsPatchWithResponse(ctx context.Context, permissionId PermissionId, body PermissionsPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*PermissionsPatchResponse, error) {
-	rsp, err := c.PermissionsPatch(ctx, permissionId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsPatchResponse(rsp)
-}
-
-// PermissionsUpdateWithBodyWithResponse request with arbitrary body returning *PermissionsUpdateResponse
-func (c *ClientWithResponses) PermissionsUpdateWithBodyWithResponse(ctx context.Context, permissionId PermissionId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PermissionsUpdateResponse, error) {
-	rsp, err := c.PermissionsUpdateWithBody(ctx, permissionId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsUpdateResponse(rsp)
-}
-
-func (c *ClientWithResponses) PermissionsUpdateWithResponse(ctx context.Context, permissionId PermissionId, body PermissionsUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*PermissionsUpdateResponse, error) {
-	rsp, err := c.PermissionsUpdate(ctx, permissionId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePermissionsUpdateResponse(rsp)
-}
-
-// RolesListWithResponse request returning *RolesListResponse
-func (c *ClientWithResponses) RolesListWithResponse(ctx context.Context, params *RolesListParams, reqEditors ...RequestEditorFn) (*RolesListResponse, error) {
-	rsp, err := c.RolesList(ctx, params, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesListResponse(rsp)
-}
-
-// RolesCreateWithBodyWithResponse request with arbitrary body returning *RolesCreateResponse
-func (c *ClientWithResponses) RolesCreateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RolesCreateResponse, error) {
-	rsp, err := c.RolesCreateWithBody(ctx, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesCreateResponse(rsp)
-}
-
-func (c *ClientWithResponses) RolesCreateWithResponse(ctx context.Context, body RolesCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*RolesCreateResponse, error) {
-	rsp, err := c.RolesCreate(ctx, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesCreateResponse(rsp)
-}
-
-// RolesDeleteWithResponse request returning *RolesDeleteResponse
-func (c *ClientWithResponses) RolesDeleteWithResponse(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*RolesDeleteResponse, error) {
-	rsp, err := c.RolesDelete(ctx, roleId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesDeleteResponse(rsp)
-}
-
-// RolesGetWithResponse request returning *RolesGetResponse
-func (c *ClientWithResponses) RolesGetWithResponse(ctx context.Context, roleId RoleId, reqEditors ...RequestEditorFn) (*RolesGetResponse, error) {
-	rsp, err := c.RolesGet(ctx, roleId, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesGetResponse(rsp)
-}
-
-// RolesPatchWithBodyWithResponse request with arbitrary body returning *RolesPatchResponse
-func (c *ClientWithResponses) RolesPatchWithBodyWithResponse(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RolesPatchResponse, error) {
-	rsp, err := c.RolesPatchWithBody(ctx, roleId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesPatchResponse(rsp)
-}
-
-func (c *ClientWithResponses) RolesPatchWithResponse(ctx context.Context, roleId RoleId, body RolesPatchJSONRequestBody, reqEditors ...RequestEditorFn) (*RolesPatchResponse, error) {
-	rsp, err := c.RolesPatch(ctx, roleId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesPatchResponse(rsp)
-}
-
-// RolesUpdateWithBodyWithResponse request with arbitrary body returning *RolesUpdateResponse
-func (c *ClientWithResponses) RolesUpdateWithBodyWithResponse(ctx context.Context, roleId RoleId, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RolesUpdateResponse, error) {
-	rsp, err := c.RolesUpdateWithBody(ctx, roleId, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesUpdateResponse(rsp)
-}
-
-func (c *ClientWithResponses) RolesUpdateWithResponse(ctx context.Context, roleId RoleId, body RolesUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*RolesUpdateResponse, error) {
-	rsp, err := c.RolesUpdate(ctx, roleId, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseRolesUpdateResponse(rsp)
-}
-
-// ParseActionsListResponse parses an HTTP response from a ActionsListWithResponse call
-func ParseActionsListResponse(rsp *http.Response) (*ActionsListResponse, error) {
+// ParseProjectsListResponse parses an HTTP response from a ProjectsListWithResponse call
+func ParseProjectsListResponse(rsp *http.Response) (*ProjectsListResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ActionsListResponse{
+	response := &ProjectsListResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ActionsList
+		var dest ProjectsList
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2184,22 +858,22 @@ func ParseActionsListResponse(rsp *http.Response) (*ActionsListResponse, error) 
 	return response, nil
 }
 
-// ParseActionsCreateResponse parses an HTTP response from a ActionsCreateWithResponse call
-func ParseActionsCreateResponse(rsp *http.Response) (*ActionsCreateResponse, error) {
+// ParseProjectsCreateResponse parses an HTTP response from a ProjectsCreateWithResponse call
+func ParseProjectsCreateResponse(rsp *http.Response) (*ProjectsCreateResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ActionsCreateResponse{
+	response := &ProjectsCreateResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest ExistingAction
+		var dest ExistingProject
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2245,15 +919,15 @@ func ParseActionsCreateResponse(rsp *http.Response) (*ActionsCreateResponse, err
 	return response, nil
 }
 
-// ParseActionsDeleteResponse parses an HTTP response from a ActionsDeleteWithResponse call
-func ParseActionsDeleteResponse(rsp *http.Response) (*ActionsDeleteResponse, error) {
+// ParseProjectsDeleteResponse parses an HTTP response from a ProjectsDeleteWithResponse call
+func ParseProjectsDeleteResponse(rsp *http.Response) (*ProjectsDeleteResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ActionsDeleteResponse{
+	response := &ProjectsDeleteResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2313,22 +987,22 @@ func ParseActionsDeleteResponse(rsp *http.Response) (*ActionsDeleteResponse, err
 	return response, nil
 }
 
-// ParseActionsGetResponse parses an HTTP response from a ActionsGetWithResponse call
-func ParseActionsGetResponse(rsp *http.Response) (*ActionsGetResponse, error) {
+// ParseProjectsGetResponse parses an HTTP response from a ProjectsGetWithResponse call
+func ParseProjectsGetResponse(rsp *http.Response) (*ProjectsGetResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ActionsGetResponse{
+	response := &ProjectsGetResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingAction
+		var dest ExistingProject
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2381,22 +1055,22 @@ func ParseActionsGetResponse(rsp *http.Response) (*ActionsGetResponse, error) {
 	return response, nil
 }
 
-// ParseActionsPatchResponse parses an HTTP response from a ActionsPatchWithResponse call
-func ParseActionsPatchResponse(rsp *http.Response) (*ActionsPatchResponse, error) {
+// ParseProjectsPatchResponse parses an HTTP response from a ProjectsPatchWithResponse call
+func ParseProjectsPatchResponse(rsp *http.Response) (*ProjectsPatchResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ActionsPatchResponse{
+	response := &ProjectsPatchResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingAction
+		var dest ExistingProject
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2449,810 +1123,22 @@ func ParseActionsPatchResponse(rsp *http.Response) (*ActionsPatchResponse, error
 	return response, nil
 }
 
-// ParseActionsUpdateResponse parses an HTTP response from a ActionsUpdateWithResponse call
-func ParseActionsUpdateResponse(rsp *http.Response) (*ActionsUpdateResponse, error) {
+// ParseProjectsUpdateResponse parses an HTTP response from a ProjectsUpdateWithResponse call
+func ParseProjectsUpdateResponse(rsp *http.Response) (*ProjectsUpdateResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &ActionsUpdateResponse{
+	response := &ProjectsUpdateResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingAction
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParsePermissionsListResponse parses an HTTP response from a PermissionsListWithResponse call
-func ParsePermissionsListResponse(rsp *http.Response) (*PermissionsListResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PermissionsListResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest PermissionsList
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParsePermissionsCreateResponse parses an HTTP response from a PermissionsCreateWithResponse call
-func ParsePermissionsCreateResponse(rsp *http.Response) (*PermissionsCreateResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PermissionsCreateResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest ExistingPermission
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON201 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParsePermissionsDeleteResponse parses an HTTP response from a PermissionsDeleteWithResponse call
-func ParsePermissionsDeleteResponse(rsp *http.Response) (*PermissionsDeleteResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PermissionsDeleteResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
-		var dest PreconditionFailed
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON412 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParsePermissionsGetResponse parses an HTTP response from a PermissionsGetWithResponse call
-func ParsePermissionsGetResponse(rsp *http.Response) (*PermissionsGetResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PermissionsGetResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingPermission
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParsePermissionsPatchResponse parses an HTTP response from a PermissionsPatchWithResponse call
-func ParsePermissionsPatchResponse(rsp *http.Response) (*PermissionsPatchResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PermissionsPatchResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingPermission
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParsePermissionsUpdateResponse parses an HTTP response from a PermissionsUpdateWithResponse call
-func ParsePermissionsUpdateResponse(rsp *http.Response) (*PermissionsUpdateResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PermissionsUpdateResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingPermission
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseRolesListResponse parses an HTTP response from a RolesListWithResponse call
-func ParseRolesListResponse(rsp *http.Response) (*RolesListResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &RolesListResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest RolesList
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseRolesCreateResponse parses an HTTP response from a RolesCreateWithResponse call
-func ParseRolesCreateResponse(rsp *http.Response) (*RolesCreateResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &RolesCreateResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest ExistingRole
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON201 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseRolesDeleteResponse parses an HTTP response from a RolesDeleteWithResponse call
-func ParseRolesDeleteResponse(rsp *http.Response) (*RolesDeleteResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &RolesDeleteResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
-		var dest PreconditionFailed
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON412 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseRolesGetResponse parses an HTTP response from a RolesGetWithResponse call
-func ParseRolesGetResponse(rsp *http.Response) (*RolesGetResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &RolesGetResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingRole
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseRolesPatchResponse parses an HTTP response from a RolesPatchWithResponse call
-func ParseRolesPatchResponse(rsp *http.Response) (*RolesPatchResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &RolesPatchResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingRole
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Unauthorized
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON401 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Forbidden
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest NotFound
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON404 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
-		var dest TooManyRequests
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON429 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ServerError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
-		var dest UnexpectedError
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSONDefault = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseRolesUpdateResponse parses an HTTP response from a RolesUpdateWithResponse call
-func ParseRolesUpdateResponse(rsp *http.Response) (*RolesUpdateResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &RolesUpdateResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest ExistingRole
+		var dest ExistingProject
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

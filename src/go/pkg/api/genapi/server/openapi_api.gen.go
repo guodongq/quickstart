@@ -5,969 +5,932 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 	"github.com/oapi-codegen/runtime"
+	strictgin "github.com/oapi-codegen/runtime/strictmiddleware/gin"
 )
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// List All Actions
-	// (GET /v1/actions)
-	ActionsList(w http.ResponseWriter, r *http.Request, params ActionsListParams)
-	// Create an Action
-	// (POST /v1/actions)
-	ActionsCreate(w http.ResponseWriter, r *http.Request)
-	// Delete an Existing Action
-	// (DELETE /v1/actions/{action_id})
-	ActionsDelete(w http.ResponseWriter, r *http.Request, actionId ActionId)
-	// Retrieve an Existing Action
-	// (GET /v1/actions/{action_id})
-	ActionsGet(w http.ResponseWriter, r *http.Request, actionId ActionId)
-	// Patch an Action
-	// (PATCH /v1/actions/{action_id})
-	ActionsPatch(w http.ResponseWriter, r *http.Request, actionId ActionId)
-	// Update an Action
-	// (PUT /v1/actions/{action_id})
-	ActionsUpdate(w http.ResponseWriter, r *http.Request, actionId ActionId)
-	// List All Permissions
-	// (GET /v1/permissions)
-	PermissionsList(w http.ResponseWriter, r *http.Request, params PermissionsListParams)
-	// Create an Permission
-	// (POST /v1/permissions)
-	PermissionsCreate(w http.ResponseWriter, r *http.Request)
-	// Delete an Existing Permission
-	// (DELETE /v1/permissions/{permission_id})
-	PermissionsDelete(w http.ResponseWriter, r *http.Request, permissionId PermissionId)
-	// Retrieve an Existing Permission
-	// (GET /v1/permissions/{permission_id})
-	PermissionsGet(w http.ResponseWriter, r *http.Request, permissionId PermissionId)
-	// Patch an Permission
-	// (PATCH /v1/permissions/{permission_id})
-	PermissionsPatch(w http.ResponseWriter, r *http.Request, permissionId PermissionId)
-	// Update an Permission
-	// (PUT /v1/permissions/{permission_id})
-	PermissionsUpdate(w http.ResponseWriter, r *http.Request, permissionId PermissionId)
-	// List All Roles
-	// (GET /v1/roles)
-	RolesList(w http.ResponseWriter, r *http.Request, params RolesListParams)
-	// Create an Role
-	// (POST /v1/roles)
-	RolesCreate(w http.ResponseWriter, r *http.Request)
-	// Delete an Existing Role
-	// (DELETE /v1/roles/{role_id})
-	RolesDelete(w http.ResponseWriter, r *http.Request, roleId RoleId)
-	// Retrieve an Existing Role
-	// (GET /v1/roles/{role_id})
-	RolesGet(w http.ResponseWriter, r *http.Request, roleId RoleId)
-	// Patch an Role
-	// (PATCH /v1/roles/{role_id})
-	RolesPatch(w http.ResponseWriter, r *http.Request, roleId RoleId)
-	// Update an Role
-	// (PUT /v1/roles/{role_id})
-	RolesUpdate(w http.ResponseWriter, r *http.Request, roleId RoleId)
-}
-
-// Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
-
-type Unimplemented struct{}
-
-// List All Actions
-// (GET /v1/actions)
-func (_ Unimplemented) ActionsList(w http.ResponseWriter, r *http.Request, params ActionsListParams) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Create an Action
-// (POST /v1/actions)
-func (_ Unimplemented) ActionsCreate(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Delete an Existing Action
-// (DELETE /v1/actions/{action_id})
-func (_ Unimplemented) ActionsDelete(w http.ResponseWriter, r *http.Request, actionId ActionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Retrieve an Existing Action
-// (GET /v1/actions/{action_id})
-func (_ Unimplemented) ActionsGet(w http.ResponseWriter, r *http.Request, actionId ActionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Patch an Action
-// (PATCH /v1/actions/{action_id})
-func (_ Unimplemented) ActionsPatch(w http.ResponseWriter, r *http.Request, actionId ActionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Update an Action
-// (PUT /v1/actions/{action_id})
-func (_ Unimplemented) ActionsUpdate(w http.ResponseWriter, r *http.Request, actionId ActionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// List All Permissions
-// (GET /v1/permissions)
-func (_ Unimplemented) PermissionsList(w http.ResponseWriter, r *http.Request, params PermissionsListParams) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Create an Permission
-// (POST /v1/permissions)
-func (_ Unimplemented) PermissionsCreate(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Delete an Existing Permission
-// (DELETE /v1/permissions/{permission_id})
-func (_ Unimplemented) PermissionsDelete(w http.ResponseWriter, r *http.Request, permissionId PermissionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Retrieve an Existing Permission
-// (GET /v1/permissions/{permission_id})
-func (_ Unimplemented) PermissionsGet(w http.ResponseWriter, r *http.Request, permissionId PermissionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Patch an Permission
-// (PATCH /v1/permissions/{permission_id})
-func (_ Unimplemented) PermissionsPatch(w http.ResponseWriter, r *http.Request, permissionId PermissionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Update an Permission
-// (PUT /v1/permissions/{permission_id})
-func (_ Unimplemented) PermissionsUpdate(w http.ResponseWriter, r *http.Request, permissionId PermissionId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// List All Roles
-// (GET /v1/roles)
-func (_ Unimplemented) RolesList(w http.ResponseWriter, r *http.Request, params RolesListParams) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Create an Role
-// (POST /v1/roles)
-func (_ Unimplemented) RolesCreate(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Delete an Existing Role
-// (DELETE /v1/roles/{role_id})
-func (_ Unimplemented) RolesDelete(w http.ResponseWriter, r *http.Request, roleId RoleId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Retrieve an Existing Role
-// (GET /v1/roles/{role_id})
-func (_ Unimplemented) RolesGet(w http.ResponseWriter, r *http.Request, roleId RoleId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Patch an Role
-// (PATCH /v1/roles/{role_id})
-func (_ Unimplemented) RolesPatch(w http.ResponseWriter, r *http.Request, roleId RoleId) {
-	w.WriteHeader(http.StatusNotImplemented)
-}
-
-// Update an Role
-// (PUT /v1/roles/{role_id})
-func (_ Unimplemented) RolesUpdate(w http.ResponseWriter, r *http.Request, roleId RoleId) {
-	w.WriteHeader(http.StatusNotImplemented)
+	// List All Projects
+	// (GET /v1/projects)
+	ProjectsList(c *gin.Context, params ProjectsListParams)
+	// Create a Project
+	// (POST /v1/projects)
+	ProjectsCreate(c *gin.Context)
+	// Delete an Existing Project
+	// (DELETE /v1/projects/{project_id})
+	ProjectsDelete(c *gin.Context, projectId ProjectId)
+	// Retrieve an Existing Project
+	// (GET /v1/projects/{project_id})
+	ProjectsGet(c *gin.Context, projectId ProjectId)
+	// Patch a Project
+	// (PATCH /v1/projects/{project_id})
+	ProjectsPatch(c *gin.Context, projectId ProjectId)
+	// Update a Project
+	// (PUT /v1/projects/{project_id})
+	ProjectsUpdate(c *gin.Context, projectId ProjectId)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler            ServerInterface
 	HandlerMiddlewares []MiddlewareFunc
-	ErrorHandlerFunc   func(w http.ResponseWriter, r *http.Request, err error)
+	ErrorHandler       func(*gin.Context, error, int)
 }
 
-type MiddlewareFunc func(http.Handler) http.Handler
+type MiddlewareFunc func(c *gin.Context)
 
-// ActionsList operation middleware
-func (siw *ServerInterfaceWrapper) ActionsList(w http.ResponseWriter, r *http.Request) {
+// ProjectsList operation middleware
+func (siw *ServerInterfaceWrapper) ProjectsList(c *gin.Context) {
 
 	var err error
 
-	ctx := r.Context()
+	c.Set(Bearer_authScopes, []string{})
 
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
+	c.Set(Apikey_authScopes, []string{})
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params ActionsListParams
+	var params ProjectsListParams
 
 	// ------------- Optional query parameter "pageable" -------------
 
-	err = runtime.BindQueryParameter("form", true, false, "pageable", r.URL.Query(), &params.Pageable)
+	err = runtime.BindQueryParameter("form", true, false, "pageable", c.Request.URL.Query(), &params.Pageable)
 	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "pageable", Err: err})
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter pageable: %w", err), http.StatusBadRequest)
 		return
 	}
 
 	// ------------- Required query parameter "searchFilter" -------------
 
-	if paramValue := r.URL.Query().Get("searchFilter"); paramValue != "" {
+	if paramValue := c.Query("searchFilter"); paramValue != "" {
 
 	} else {
-		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "searchFilter"})
+		siw.ErrorHandler(c, fmt.Errorf("Query argument searchFilter is required, but not found"), http.StatusBadRequest)
 		return
 	}
 
-	err = runtime.BindQueryParameter("form", true, true, "searchFilter", r.URL.Query(), &params.SearchFilter)
+	err = runtime.BindQueryParameter("form", true, true, "searchFilter", c.Request.URL.Query(), &params.SearchFilter)
 	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "searchFilter", Err: err})
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter searchFilter: %w", err), http.StatusBadRequest)
 		return
 	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ActionsList(w, r, params)
-	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// ActionsCreate operation middleware
-func (siw *ServerInterfaceWrapper) ActionsCreate(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{"action:create"})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ActionsCreate(w, r)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// ActionsDelete operation middleware
-func (siw *ServerInterfaceWrapper) ActionsDelete(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "action_id" -------------
-	var actionId ActionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "action_id", chi.URLParam(r, "action_id"), &actionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "action_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ActionsDelete(w, r, actionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// ActionsGet operation middleware
-func (siw *ServerInterfaceWrapper) ActionsGet(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "action_id" -------------
-	var actionId ActionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "action_id", chi.URLParam(r, "action_id"), &actionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "action_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ActionsGet(w, r, actionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// ActionsPatch operation middleware
-func (siw *ServerInterfaceWrapper) ActionsPatch(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "action_id" -------------
-	var actionId ActionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "action_id", chi.URLParam(r, "action_id"), &actionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "action_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ActionsPatch(w, r, actionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// ActionsUpdate operation middleware
-func (siw *ServerInterfaceWrapper) ActionsUpdate(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "action_id" -------------
-	var actionId ActionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "action_id", chi.URLParam(r, "action_id"), &actionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "action_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ActionsUpdate(w, r, actionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PermissionsList operation middleware
-func (siw *ServerInterfaceWrapper) PermissionsList(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params PermissionsListParams
-
-	// ------------- Optional query parameter "pageable" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "pageable", r.URL.Query(), &params.Pageable)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "pageable", Err: err})
-		return
-	}
-
-	// ------------- Required query parameter "searchFilter" -------------
-
-	if paramValue := r.URL.Query().Get("searchFilter"); paramValue != "" {
-
-	} else {
-		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "searchFilter"})
-		return
-	}
-
-	err = runtime.BindQueryParameter("form", true, true, "searchFilter", r.URL.Query(), &params.SearchFilter)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "searchFilter", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PermissionsList(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PermissionsCreate operation middleware
-func (siw *ServerInterfaceWrapper) PermissionsCreate(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PermissionsCreate(w, r)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PermissionsDelete operation middleware
-func (siw *ServerInterfaceWrapper) PermissionsDelete(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "permission_id" -------------
-	var permissionId PermissionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "permission_id", chi.URLParam(r, "permission_id"), &permissionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "permission_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PermissionsDelete(w, r, permissionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PermissionsGet operation middleware
-func (siw *ServerInterfaceWrapper) PermissionsGet(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "permission_id" -------------
-	var permissionId PermissionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "permission_id", chi.URLParam(r, "permission_id"), &permissionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "permission_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PermissionsGet(w, r, permissionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PermissionsPatch operation middleware
-func (siw *ServerInterfaceWrapper) PermissionsPatch(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "permission_id" -------------
-	var permissionId PermissionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "permission_id", chi.URLParam(r, "permission_id"), &permissionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "permission_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PermissionsPatch(w, r, permissionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PermissionsUpdate operation middleware
-func (siw *ServerInterfaceWrapper) PermissionsUpdate(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "permission_id" -------------
-	var permissionId PermissionId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "permission_id", chi.URLParam(r, "permission_id"), &permissionId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "permission_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PermissionsUpdate(w, r, permissionId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// RolesList operation middleware
-func (siw *ServerInterfaceWrapper) RolesList(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params RolesListParams
-
-	// ------------- Optional query parameter "pageable" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "pageable", r.URL.Query(), &params.Pageable)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "pageable", Err: err})
-		return
-	}
-
-	// ------------- Required query parameter "searchFilter" -------------
-
-	if paramValue := r.URL.Query().Get("searchFilter"); paramValue != "" {
-
-	} else {
-		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "searchFilter"})
-		return
-	}
-
-	err = runtime.BindQueryParameter("form", true, true, "searchFilter", r.URL.Query(), &params.SearchFilter)
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "searchFilter", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.RolesList(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// RolesCreate operation middleware
-func (siw *ServerInterfaceWrapper) RolesCreate(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.RolesCreate(w, r)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// RolesDelete operation middleware
-func (siw *ServerInterfaceWrapper) RolesDelete(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "role_id" -------------
-	var roleId RoleId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "role_id", chi.URLParam(r, "role_id"), &roleId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "role_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.RolesDelete(w, r, roleId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// RolesGet operation middleware
-func (siw *ServerInterfaceWrapper) RolesGet(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "role_id" -------------
-	var roleId RoleId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "role_id", chi.URLParam(r, "role_id"), &roleId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "role_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.RolesGet(w, r, roleId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// RolesPatch operation middleware
-func (siw *ServerInterfaceWrapper) RolesPatch(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "role_id" -------------
-	var roleId RoleId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "role_id", chi.URLParam(r, "role_id"), &roleId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "role_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.RolesPatch(w, r, roleId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// RolesUpdate operation middleware
-func (siw *ServerInterfaceWrapper) RolesUpdate(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-
-	// ------------- Path parameter "role_id" -------------
-	var roleId RoleId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "role_id", chi.URLParam(r, "role_id"), &roleId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "role_id", Err: err})
-		return
-	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Bearer_authScopes, []string{})
-
-	ctx = context.WithValue(ctx, Apikey_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.RolesUpdate(w, r, roleId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-type UnescapedCookieParamError struct {
-	ParamName string
-	Err       error
-}
-
-func (e *UnescapedCookieParamError) Error() string {
-	return fmt.Sprintf("error unescaping cookie parameter '%s'", e.ParamName)
-}
-
-func (e *UnescapedCookieParamError) Unwrap() error {
-	return e.Err
-}
-
-type UnmarshalingParamError struct {
-	ParamName string
-	Err       error
-}
-
-func (e *UnmarshalingParamError) Error() string {
-	return fmt.Sprintf("Error unmarshaling parameter %s as JSON: %s", e.ParamName, e.Err.Error())
-}
-
-func (e *UnmarshalingParamError) Unwrap() error {
-	return e.Err
-}
-
-type RequiredParamError struct {
-	ParamName string
-}
-
-func (e *RequiredParamError) Error() string {
-	return fmt.Sprintf("Query argument %s is required, but not found", e.ParamName)
-}
-
-type RequiredHeaderError struct {
-	ParamName string
-	Err       error
-}
-
-func (e *RequiredHeaderError) Error() string {
-	return fmt.Sprintf("Header parameter %s is required, but not found", e.ParamName)
-}
-
-func (e *RequiredHeaderError) Unwrap() error {
-	return e.Err
-}
-
-type InvalidParamFormatError struct {
-	ParamName string
-	Err       error
-}
-
-func (e *InvalidParamFormatError) Error() string {
-	return fmt.Sprintf("Invalid format for parameter %s: %s", e.ParamName, e.Err.Error())
-}
-
-func (e *InvalidParamFormatError) Unwrap() error {
-	return e.Err
-}
-
-type TooManyValuesForParamError struct {
-	ParamName string
-	Count     int
-}
-
-func (e *TooManyValuesForParamError) Error() string {
-	return fmt.Sprintf("Expected one value for %s, got %d", e.ParamName, e.Count)
-}
-
-// Handler creates http.Handler with routing matching OpenAPI spec.
-func Handler(si ServerInterface) http.Handler {
-	return HandlerWithOptions(si, ChiServerOptions{})
-}
-
-type ChiServerOptions struct {
-	BaseURL          string
-	BaseRouter       chi.Router
-	Middlewares      []MiddlewareFunc
-	ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
-}
-
-// HandlerFromMux creates http.Handler with routing matching OpenAPI spec based on the provided mux.
-func HandlerFromMux(si ServerInterface, r chi.Router) http.Handler {
-	return HandlerWithOptions(si, ChiServerOptions{
-		BaseRouter: r,
-	})
-}
-
-func HandlerFromMuxWithBaseURL(si ServerInterface, r chi.Router, baseURL string) http.Handler {
-	return HandlerWithOptions(si, ChiServerOptions{
-		BaseURL:    baseURL,
-		BaseRouter: r,
-	})
-}
-
-// HandlerWithOptions creates http.Handler with additional options
-func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handler {
-	r := options.BaseRouter
-
-	if r == nil {
-		r = chi.NewRouter()
-	}
-	if options.ErrorHandlerFunc == nil {
-		options.ErrorHandlerFunc = func(w http.ResponseWriter, r *http.Request, err error) {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+		middleware(c)
+		if c.IsAborted() {
+			return
 		}
 	}
+
+	siw.Handler.ProjectsList(c, params)
+}
+
+// ProjectsCreate operation middleware
+func (siw *ServerInterfaceWrapper) ProjectsCreate(c *gin.Context) {
+
+	c.Set(Bearer_authScopes, []string{"project:create"})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.ProjectsCreate(c)
+}
+
+// ProjectsDelete operation middleware
+func (siw *ServerInterfaceWrapper) ProjectsDelete(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "project_id" -------------
+	var projectId ProjectId
+
+	err = runtime.BindStyledParameterWithOptions("simple", "project_id", c.Param("project_id"), &projectId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter project_id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	c.Set(Bearer_authScopes, []string{})
+
+	c.Set(Apikey_authScopes, []string{})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.ProjectsDelete(c, projectId)
+}
+
+// ProjectsGet operation middleware
+func (siw *ServerInterfaceWrapper) ProjectsGet(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "project_id" -------------
+	var projectId ProjectId
+
+	err = runtime.BindStyledParameterWithOptions("simple", "project_id", c.Param("project_id"), &projectId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter project_id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	c.Set(Bearer_authScopes, []string{})
+
+	c.Set(Apikey_authScopes, []string{})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.ProjectsGet(c, projectId)
+}
+
+// ProjectsPatch operation middleware
+func (siw *ServerInterfaceWrapper) ProjectsPatch(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "project_id" -------------
+	var projectId ProjectId
+
+	err = runtime.BindStyledParameterWithOptions("simple", "project_id", c.Param("project_id"), &projectId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter project_id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	c.Set(Bearer_authScopes, []string{})
+
+	c.Set(Apikey_authScopes, []string{})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.ProjectsPatch(c, projectId)
+}
+
+// ProjectsUpdate operation middleware
+func (siw *ServerInterfaceWrapper) ProjectsUpdate(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "project_id" -------------
+	var projectId ProjectId
+
+	err = runtime.BindStyledParameterWithOptions("simple", "project_id", c.Param("project_id"), &projectId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter project_id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	c.Set(Bearer_authScopes, []string{})
+
+	c.Set(Apikey_authScopes, []string{})
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.ProjectsUpdate(c, projectId)
+}
+
+// GinServerOptions provides options for the Gin server.
+type GinServerOptions struct {
+	BaseURL      string
+	Middlewares  []MiddlewareFunc
+	ErrorHandler func(*gin.Context, error, int)
+}
+
+// RegisterHandlers creates http.Handler with routing matching OpenAPI spec.
+func RegisterHandlers(router gin.IRouter, si ServerInterface) {
+	RegisterHandlersWithOptions(router, si, GinServerOptions{})
+}
+
+// RegisterHandlersWithOptions creates http.Handler with additional options
+func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options GinServerOptions) {
+	errorHandler := options.ErrorHandler
+	if errorHandler == nil {
+		errorHandler = func(c *gin.Context, err error, statusCode int) {
+			c.JSON(statusCode, gin.H{"msg": err.Error()})
+		}
+	}
+
 	wrapper := ServerInterfaceWrapper{
 		Handler:            si,
 		HandlerMiddlewares: options.Middlewares,
-		ErrorHandlerFunc:   options.ErrorHandlerFunc,
+		ErrorHandler:       errorHandler,
 	}
 
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/actions", wrapper.ActionsList)
-	})
-	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/v1/actions", wrapper.ActionsCreate)
-	})
-	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/v1/actions/{action_id}", wrapper.ActionsDelete)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/actions/{action_id}", wrapper.ActionsGet)
-	})
-	r.Group(func(r chi.Router) {
-		r.Patch(options.BaseURL+"/v1/actions/{action_id}", wrapper.ActionsPatch)
-	})
-	r.Group(func(r chi.Router) {
-		r.Put(options.BaseURL+"/v1/actions/{action_id}", wrapper.ActionsUpdate)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/permissions", wrapper.PermissionsList)
-	})
-	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/v1/permissions", wrapper.PermissionsCreate)
-	})
-	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/v1/permissions/{permission_id}", wrapper.PermissionsDelete)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/permissions/{permission_id}", wrapper.PermissionsGet)
-	})
-	r.Group(func(r chi.Router) {
-		r.Patch(options.BaseURL+"/v1/permissions/{permission_id}", wrapper.PermissionsPatch)
-	})
-	r.Group(func(r chi.Router) {
-		r.Put(options.BaseURL+"/v1/permissions/{permission_id}", wrapper.PermissionsUpdate)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/roles", wrapper.RolesList)
-	})
-	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/v1/roles", wrapper.RolesCreate)
-	})
-	r.Group(func(r chi.Router) {
-		r.Delete(options.BaseURL+"/v1/roles/{role_id}", wrapper.RolesDelete)
-	})
-	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/roles/{role_id}", wrapper.RolesGet)
-	})
-	r.Group(func(r chi.Router) {
-		r.Patch(options.BaseURL+"/v1/roles/{role_id}", wrapper.RolesPatch)
-	})
-	r.Group(func(r chi.Router) {
-		r.Put(options.BaseURL+"/v1/roles/{role_id}", wrapper.RolesUpdate)
-	})
+	router.GET(options.BaseURL+"/v1/projects", wrapper.ProjectsList)
+	router.POST(options.BaseURL+"/v1/projects", wrapper.ProjectsCreate)
+	router.DELETE(options.BaseURL+"/v1/projects/:project_id", wrapper.ProjectsDelete)
+	router.GET(options.BaseURL+"/v1/projects/:project_id", wrapper.ProjectsGet)
+	router.PATCH(options.BaseURL+"/v1/projects/:project_id", wrapper.ProjectsPatch)
+	router.PUT(options.BaseURL+"/v1/projects/:project_id", wrapper.ProjectsUpdate)
+}
 
-	return r
+type ExistingProjectJSONResponse Project
+
+type ForbiddenJSONResponse Error
+
+type NoContentResponse struct {
+}
+
+type NotFoundJSONResponse Error
+
+type PreconditionFailedJSONResponse Error
+
+type ProjectsListJSONResponse struct {
+	// Content Array of actions.
+	Content *[]Project `json:"content,omitempty"`
+
+	// Pageable properties of pageable object
+	Pageable *PageProperties `json:"pageable,omitempty"`
+
+	// Total Total number of records available.
+	Total *Total `json:"total,omitempty"`
+}
+
+type ServerErrorJSONResponse Error
+
+type TooManyRequestsJSONResponse Error
+
+type UnauthorizedJSONResponse Error
+
+type UnexpectedErrorJSONResponse Error
+
+type ProjectsListRequestObject struct {
+	Params ProjectsListParams
+}
+
+type ProjectsListResponseObject interface {
+	VisitProjectsListResponse(w http.ResponseWriter) error
+}
+
+type ProjectsList200JSONResponse struct{ ProjectsListJSONResponse }
+
+func (response ProjectsList200JSONResponse) VisitProjectsListResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsList401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ProjectsList401JSONResponse) VisitProjectsListResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsList403JSONResponse struct{ ForbiddenJSONResponse }
+
+func (response ProjectsList403JSONResponse) VisitProjectsListResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsList429JSONResponse struct{ TooManyRequestsJSONResponse }
+
+func (response ProjectsList429JSONResponse) VisitProjectsListResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(429)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsList500JSONResponse struct{ ServerErrorJSONResponse }
+
+func (response ProjectsList500JSONResponse) VisitProjectsListResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsListdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response ProjectsListdefaultJSONResponse) VisitProjectsListResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type ProjectsCreateRequestObject struct {
+	Body *ProjectsCreateJSONRequestBody
+}
+
+type ProjectsCreateResponseObject interface {
+	VisitProjectsCreateResponse(w http.ResponseWriter) error
+}
+
+type ProjectsCreate201JSONResponse struct{ ExistingProjectJSONResponse }
+
+func (response ProjectsCreate201JSONResponse) VisitProjectsCreateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsCreate401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ProjectsCreate401JSONResponse) VisitProjectsCreateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsCreate403JSONResponse struct{ ForbiddenJSONResponse }
+
+func (response ProjectsCreate403JSONResponse) VisitProjectsCreateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsCreate429JSONResponse struct{ TooManyRequestsJSONResponse }
+
+func (response ProjectsCreate429JSONResponse) VisitProjectsCreateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(429)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsCreate500JSONResponse struct{ ServerErrorJSONResponse }
+
+func (response ProjectsCreate500JSONResponse) VisitProjectsCreateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsCreatedefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response ProjectsCreatedefaultJSONResponse) VisitProjectsCreateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type ProjectsDeleteRequestObject struct {
+	ProjectId ProjectId `json:"project_id"`
+}
+
+type ProjectsDeleteResponseObject interface {
+	VisitProjectsDeleteResponse(w http.ResponseWriter) error
+}
+
+type ProjectsDelete204Response = NoContentResponse
+
+func (response ProjectsDelete204Response) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type ProjectsDelete401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ProjectsDelete401JSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsDelete403JSONResponse struct{ ForbiddenJSONResponse }
+
+func (response ProjectsDelete403JSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsDelete404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response ProjectsDelete404JSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsDelete412JSONResponse struct{ PreconditionFailedJSONResponse }
+
+func (response ProjectsDelete412JSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(412)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsDelete429JSONResponse struct{ TooManyRequestsJSONResponse }
+
+func (response ProjectsDelete429JSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(429)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsDelete500JSONResponse struct{ ServerErrorJSONResponse }
+
+func (response ProjectsDelete500JSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsDeletedefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response ProjectsDeletedefaultJSONResponse) VisitProjectsDeleteResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type ProjectsGetRequestObject struct {
+	ProjectId ProjectId `json:"project_id"`
+}
+
+type ProjectsGetResponseObject interface {
+	VisitProjectsGetResponse(w http.ResponseWriter) error
+}
+
+type ProjectsGet200JSONResponse struct{ ExistingProjectJSONResponse }
+
+func (response ProjectsGet200JSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsGet401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ProjectsGet401JSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsGet403JSONResponse struct{ ForbiddenJSONResponse }
+
+func (response ProjectsGet403JSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsGet404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response ProjectsGet404JSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsGet429JSONResponse struct{ TooManyRequestsJSONResponse }
+
+func (response ProjectsGet429JSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(429)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsGet500JSONResponse struct{ ServerErrorJSONResponse }
+
+func (response ProjectsGet500JSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsGetdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response ProjectsGetdefaultJSONResponse) VisitProjectsGetResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type ProjectsPatchRequestObject struct {
+	ProjectId ProjectId `json:"project_id"`
+	Body      *ProjectsPatchJSONRequestBody
+}
+
+type ProjectsPatchResponseObject interface {
+	VisitProjectsPatchResponse(w http.ResponseWriter) error
+}
+
+type ProjectsPatch200JSONResponse struct{ ExistingProjectJSONResponse }
+
+func (response ProjectsPatch200JSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsPatch401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ProjectsPatch401JSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsPatch403JSONResponse struct{ ForbiddenJSONResponse }
+
+func (response ProjectsPatch403JSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsPatch404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response ProjectsPatch404JSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsPatch429JSONResponse struct{ TooManyRequestsJSONResponse }
+
+func (response ProjectsPatch429JSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(429)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsPatch500JSONResponse struct{ ServerErrorJSONResponse }
+
+func (response ProjectsPatch500JSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsPatchdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response ProjectsPatchdefaultJSONResponse) VisitProjectsPatchResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type ProjectsUpdateRequestObject struct {
+	ProjectId ProjectId `json:"project_id"`
+	Body      *ProjectsUpdateJSONRequestBody
+}
+
+type ProjectsUpdateResponseObject interface {
+	VisitProjectsUpdateResponse(w http.ResponseWriter) error
+}
+
+type ProjectsUpdate200JSONResponse struct{ ExistingProjectJSONResponse }
+
+func (response ProjectsUpdate200JSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsUpdate401JSONResponse struct{ UnauthorizedJSONResponse }
+
+func (response ProjectsUpdate401JSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(401)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsUpdate403JSONResponse struct{ ForbiddenJSONResponse }
+
+func (response ProjectsUpdate403JSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsUpdate404JSONResponse struct{ NotFoundJSONResponse }
+
+func (response ProjectsUpdate404JSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsUpdate429JSONResponse struct{ TooManyRequestsJSONResponse }
+
+func (response ProjectsUpdate429JSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(429)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsUpdate500JSONResponse struct{ ServerErrorJSONResponse }
+
+func (response ProjectsUpdate500JSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type ProjectsUpdatedefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response ProjectsUpdatedefaultJSONResponse) VisitProjectsUpdateResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+// StrictServerInterface represents all server handlers.
+type StrictServerInterface interface {
+	// List All Projects
+	// (GET /v1/projects)
+	ProjectsList(ctx context.Context, request ProjectsListRequestObject) (ProjectsListResponseObject, error)
+	// Create a Project
+	// (POST /v1/projects)
+	ProjectsCreate(ctx context.Context, request ProjectsCreateRequestObject) (ProjectsCreateResponseObject, error)
+	// Delete an Existing Project
+	// (DELETE /v1/projects/{project_id})
+	ProjectsDelete(ctx context.Context, request ProjectsDeleteRequestObject) (ProjectsDeleteResponseObject, error)
+	// Retrieve an Existing Project
+	// (GET /v1/projects/{project_id})
+	ProjectsGet(ctx context.Context, request ProjectsGetRequestObject) (ProjectsGetResponseObject, error)
+	// Patch a Project
+	// (PATCH /v1/projects/{project_id})
+	ProjectsPatch(ctx context.Context, request ProjectsPatchRequestObject) (ProjectsPatchResponseObject, error)
+	// Update a Project
+	// (PUT /v1/projects/{project_id})
+	ProjectsUpdate(ctx context.Context, request ProjectsUpdateRequestObject) (ProjectsUpdateResponseObject, error)
+}
+
+type StrictHandlerFunc = strictgin.StrictGinHandlerFunc
+type StrictMiddlewareFunc = strictgin.StrictGinMiddlewareFunc
+
+func NewStrictHandler(ssi StrictServerInterface, middlewares []StrictMiddlewareFunc) ServerInterface {
+	return &strictHandler{ssi: ssi, middlewares: middlewares}
+}
+
+type strictHandler struct {
+	ssi         StrictServerInterface
+	middlewares []StrictMiddlewareFunc
+}
+
+// ProjectsList operation middleware
+func (sh *strictHandler) ProjectsList(ctx *gin.Context, params ProjectsListParams) {
+	var request ProjectsListRequestObject
+
+	request.Params = params
+
+	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
+		return sh.ssi.ProjectsList(ctx, request.(ProjectsListRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProjectsList")
+	}
+
+	response, err := handler(ctx, request)
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.Status(http.StatusInternalServerError)
+	} else if validResponse, ok := response.(ProjectsListResponseObject); ok {
+		if err := validResponse.VisitProjectsListResponse(ctx.Writer); err != nil {
+			ctx.Error(err)
+		}
+	} else if response != nil {
+		ctx.Error(fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ProjectsCreate operation middleware
+func (sh *strictHandler) ProjectsCreate(ctx *gin.Context) {
+	var request ProjectsCreateRequestObject
+
+	var body ProjectsCreateJSONRequestBody
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		ctx.Error(err)
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
+		return sh.ssi.ProjectsCreate(ctx, request.(ProjectsCreateRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProjectsCreate")
+	}
+
+	response, err := handler(ctx, request)
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.Status(http.StatusInternalServerError)
+	} else if validResponse, ok := response.(ProjectsCreateResponseObject); ok {
+		if err := validResponse.VisitProjectsCreateResponse(ctx.Writer); err != nil {
+			ctx.Error(err)
+		}
+	} else if response != nil {
+		ctx.Error(fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ProjectsDelete operation middleware
+func (sh *strictHandler) ProjectsDelete(ctx *gin.Context, projectId ProjectId) {
+	var request ProjectsDeleteRequestObject
+
+	request.ProjectId = projectId
+
+	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
+		return sh.ssi.ProjectsDelete(ctx, request.(ProjectsDeleteRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProjectsDelete")
+	}
+
+	response, err := handler(ctx, request)
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.Status(http.StatusInternalServerError)
+	} else if validResponse, ok := response.(ProjectsDeleteResponseObject); ok {
+		if err := validResponse.VisitProjectsDeleteResponse(ctx.Writer); err != nil {
+			ctx.Error(err)
+		}
+	} else if response != nil {
+		ctx.Error(fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ProjectsGet operation middleware
+func (sh *strictHandler) ProjectsGet(ctx *gin.Context, projectId ProjectId) {
+	var request ProjectsGetRequestObject
+
+	request.ProjectId = projectId
+
+	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
+		return sh.ssi.ProjectsGet(ctx, request.(ProjectsGetRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProjectsGet")
+	}
+
+	response, err := handler(ctx, request)
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.Status(http.StatusInternalServerError)
+	} else if validResponse, ok := response.(ProjectsGetResponseObject); ok {
+		if err := validResponse.VisitProjectsGetResponse(ctx.Writer); err != nil {
+			ctx.Error(err)
+		}
+	} else if response != nil {
+		ctx.Error(fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ProjectsPatch operation middleware
+func (sh *strictHandler) ProjectsPatch(ctx *gin.Context, projectId ProjectId) {
+	var request ProjectsPatchRequestObject
+
+	request.ProjectId = projectId
+
+	var body ProjectsPatchJSONRequestBody
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		ctx.Error(err)
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
+		return sh.ssi.ProjectsPatch(ctx, request.(ProjectsPatchRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProjectsPatch")
+	}
+
+	response, err := handler(ctx, request)
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.Status(http.StatusInternalServerError)
+	} else if validResponse, ok := response.(ProjectsPatchResponseObject); ok {
+		if err := validResponse.VisitProjectsPatchResponse(ctx.Writer); err != nil {
+			ctx.Error(err)
+		}
+	} else if response != nil {
+		ctx.Error(fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ProjectsUpdate operation middleware
+func (sh *strictHandler) ProjectsUpdate(ctx *gin.Context, projectId ProjectId) {
+	var request ProjectsUpdateRequestObject
+
+	request.ProjectId = projectId
+
+	var body ProjectsUpdateJSONRequestBody
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		ctx.Error(err)
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
+		return sh.ssi.ProjectsUpdate(ctx, request.(ProjectsUpdateRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProjectsUpdate")
+	}
+
+	response, err := handler(ctx, request)
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.Status(http.StatusInternalServerError)
+	} else if validResponse, ok := response.(ProjectsUpdateResponseObject); ok {
+		if err := validResponse.VisitProjectsUpdateResponse(ctx.Writer); err != nil {
+			ctx.Error(err)
+		}
+	} else if response != nil {
+		ctx.Error(fmt.Errorf("unexpected response type: %T", response))
+	}
 }

@@ -1,6 +1,6 @@
 package ddd
 
-type PersistentEntity[ID comparable] interface {
+type PersistentObject[ID comparable] interface {
 	ToDomain() Entity[ID]
 	FromDomain(entity Entity[ID])
 }

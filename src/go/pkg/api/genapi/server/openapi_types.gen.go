@@ -14,30 +14,6 @@ const (
 	Bearer_authScopes = "bearer_auth.Scopes"
 )
 
-// Action defines model for action.
-type Action struct {
-	// Code The definition of API
-	Code *string `json:"code,omitempty"`
-
-	// Id The unique identifier of the resource in UUID format
-	Id *Identity `json:"id,omitempty"`
-
-	// Meta Information about the response itself.
-	Meta *MetaProperties `json:"meta,omitempty"`
-
-	// ServiceId The audience that action need to access
-	ServiceId *string `json:"service_id,omitempty"`
-}
-
-// ActionBase defines model for action_base.
-type ActionBase struct {
-	// Code The definition of API
-	Code *string `json:"code,omitempty"`
-
-	// ServiceId The audience that action need to access
-	ServiceId *string `json:"service_id,omitempty"`
-}
-
 // Error defines model for error.
 type Error struct {
 	// Id A short identifier corresponding to the HTTP status code returned. For example, the ID for a response returning a 404 status code would be "not_found."
@@ -50,8 +26,8 @@ type Error struct {
 	RequestId *string `json:"request_id,omitempty"`
 }
 
-// Identity The unique identifier of the resource in UUID format
-type Identity = openapi_types.UUID
+// Identifier The unique identifier of the resource in UUID format
+type Identifier = openapi_types.UUID
 
 // MetaProperties Information about the response itself.
 type MetaProperties struct {
@@ -89,147 +65,44 @@ type PageProperties struct {
 	Sort *interface{} `json:"sort,omitempty"`
 }
 
-// Permission defines model for permission.
-type Permission struct {
-	Actions *[]string `json:"actions,omitempty"`
-
-	// Description The description of permission
+// Project defines model for project.
+type Project struct {
+	// Description A description of the project
 	Description *string `json:"description,omitempty"`
 
 	// Id The unique identifier of the resource in UUID format
-	Id *Identity `json:"id,omitempty"`
+	Id *Identifier `json:"id,omitempty"`
 
 	// Meta Information about the response itself.
 	Meta *MetaProperties `json:"meta,omitempty"`
 
-	// Name The name of permission
-	Name  *string   `json:"name,omitempty"`
-	Tags  *[]string `json:"tags,omitempty"`
-	Types *[]string `json:"types,omitempty"`
+	// Name The name of project
+	Name *string `json:"name,omitempty"`
 }
 
-// PermissionBase defines model for permission_base.
-type PermissionBase struct {
-	Actions *[]string `json:"actions,omitempty"`
-
-	// Description The description of permission
+// ProjectBase defines model for project_base.
+type ProjectBase struct {
+	// Description A description of the project
 	Description *string `json:"description,omitempty"`
 
-	// Name The name of permission
-	Name  *string   `json:"name,omitempty"`
-	Tags  *[]string `json:"tags,omitempty"`
-	Types *[]string `json:"types,omitempty"`
-}
-
-// PermissionUpdatable defines model for permission_updatable.
-type PermissionUpdatable struct {
-	Actions *[]string `json:"actions,omitempty"`
-
-	// Description The description of permission
-	Description *string   `json:"description,omitempty"`
-	Tags        *[]string `json:"tags,omitempty"`
-}
-
-// Role defines model for role.
-type Role struct {
-	// Description The description of role
-	Description *string `json:"description,omitempty"`
-
-	// Id The unique identifier of the resource in UUID format
-	Id *Identity `json:"id,omitempty"`
-
-	// Meta Information about the response itself.
-	Meta *MetaProperties `json:"meta,omitempty"`
-
-	// Name The name of permission
-	Name        *string   `json:"name,omitempty"`
-	NodeId      *string   `json:"node_id,omitempty"`
-	Permissions *[]string `json:"permissions,omitempty"`
-	Tags        *[]string `json:"tags,omitempty"`
-	Type        *string   `json:"type,omitempty"`
-	Visibility  *string   `json:"visibility,omitempty"`
-}
-
-// RoleBase defines model for role_base.
-type RoleBase struct {
-	// Description The description of role
-	Description *string `json:"description,omitempty"`
-
-	// Name The name of permission
-	Name        *string   `json:"name,omitempty"`
-	NodeId      *string   `json:"node_id,omitempty"`
-	Permissions *[]string `json:"permissions,omitempty"`
-	Tags        *[]string `json:"tags,omitempty"`
-	Type        *string   `json:"type,omitempty"`
-	Visibility  *string   `json:"visibility,omitempty"`
-}
-
-// RoleUpdatable defines model for role_updatable.
-type RoleUpdatable struct {
-	// Description The description of role
-	Description *string `json:"description,omitempty"`
-
-	// Name The name of permission
-	Name        *string   `json:"name,omitempty"`
-	Permissions *[]string `json:"permissions,omitempty"`
-	Tags        *[]string `json:"tags,omitempty"`
-	Visibility  *string   `json:"visibility,omitempty"`
+	// Name The name of project
+	Name *string `json:"name,omitempty"`
 }
 
 // Total Total number of records available.
 type Total = int32
 
-// ActionId defines model for action_id.
-type ActionId = openapi_types.UUID
-
-// ActionSearchFilter defines model for action_search_filter.
-type ActionSearchFilter = ActionBase
-
 // Pageable properties of pageable object
 type Pageable = PageProperties
 
-// PermissionId defines model for permission_id.
-type PermissionId = openapi_types.UUID
+// ProjectId defines model for project_id.
+type ProjectId = openapi_types.UUID
 
-// PermissionSearchFilter defines model for permission_search_filter.
-type PermissionSearchFilter struct {
-	Name *string `json:"name,omitempty"`
-	Tag  *string `json:"tag,omitempty"`
-	Type *string `json:"type,omitempty"`
-}
+// ProjectSearchFilter defines model for project_search_filter.
+type ProjectSearchFilter = ProjectBase
 
-// RoleId defines model for role_id.
-type RoleId = openapi_types.UUID
-
-// RoleSearchFilter defines model for role_search_filter.
-type RoleSearchFilter struct {
-	Name       *string `json:"name,omitempty"`
-	NodeId     *string `json:"node_id,omitempty"`
-	Tag        *string `json:"tag,omitempty"`
-	Type       *string `json:"type,omitempty"`
-	Visibility *string `json:"visibility,omitempty"`
-}
-
-// ActionsList defines model for actions_list.
-type ActionsList struct {
-	// Content Array of actions.
-	Content *[]Action `json:"content,omitempty"`
-
-	// Pageable properties of pageable object
-	Pageable *PageProperties `json:"pageable,omitempty"`
-
-	// Total Total number of records available.
-	Total *Total `json:"total,omitempty"`
-}
-
-// ExistingAction defines model for existing_action.
-type ExistingAction = Action
-
-// ExistingPermission defines model for existing_permission.
-type ExistingPermission = Permission
-
-// ExistingRole defines model for existing_role.
-type ExistingRole = Role
+// ExistingProject defines model for existing_project.
+type ExistingProject = Project
 
 // Forbidden defines model for forbidden.
 type Forbidden = Error
@@ -237,25 +110,13 @@ type Forbidden = Error
 // NotFound defines model for not_found.
 type NotFound = Error
 
-// PermissionsList defines model for permissions_list.
-type PermissionsList struct {
-	// Content Array of actions.
-	Content *[]Permission `json:"content,omitempty"`
-
-	// Pageable properties of pageable object
-	Pageable *PageProperties `json:"pageable,omitempty"`
-
-	// Total Total number of records available.
-	Total *Total `json:"total,omitempty"`
-}
-
 // PreconditionFailed defines model for precondition_failed.
 type PreconditionFailed = Error
 
-// RolesList defines model for roles_list.
-type RolesList struct {
-	// Content Array of roles.
-	Content *[]Role `json:"content,omitempty"`
+// ProjectsList defines model for projects_list.
+type ProjectsList struct {
+	// Content Array of actions.
+	Content *[]Project `json:"content,omitempty"`
 
 	// Pageable properties of pageable object
 	Pageable *PageProperties `json:"pageable,omitempty"`
@@ -276,74 +137,26 @@ type Unauthorized = Error
 // UnexpectedError defines model for unexpected_error.
 type UnexpectedError = Error
 
-// ActionsListParams defines parameters for ActionsList.
-type ActionsListParams struct {
+// ProjectsListParams defines parameters for ProjectsList.
+type ProjectsListParams struct {
 	// Pageable properties of pagination parameters
 	Pageable *Pageable `form:"pageable,omitempty" json:"pageable,omitempty"`
 
-	// SearchFilter search filter condition for list actions
-	SearchFilter ActionSearchFilter `form:"searchFilter" json:"searchFilter"`
+	// SearchFilter search filter condition for list projects
+	SearchFilter ProjectSearchFilter `form:"searchFilter" json:"searchFilter"`
 }
 
-// ActionsCreateJSONBody defines parameters for ActionsCreate.
-type ActionsCreateJSONBody = ActionBase
+// ProjectsCreateJSONBody defines parameters for ProjectsCreate.
+type ProjectsCreateJSONBody = ProjectBase
 
-// ActionsUpdateJSONBody defines parameters for ActionsUpdate.
-type ActionsUpdateJSONBody = ActionBase
+// ProjectsUpdateJSONBody defines parameters for ProjectsUpdate.
+type ProjectsUpdateJSONBody = ProjectBase
 
-// PermissionsListParams defines parameters for PermissionsList.
-type PermissionsListParams struct {
-	// Pageable properties of pagination parameters
-	Pageable *Pageable `form:"pageable,omitempty" json:"pageable,omitempty"`
+// ProjectsCreateJSONRequestBody defines body for ProjectsCreate for application/json ContentType.
+type ProjectsCreateJSONRequestBody = ProjectsCreateJSONBody
 
-	// SearchFilter search filter condition for list actions
-	SearchFilter PermissionSearchFilter `form:"searchFilter" json:"searchFilter"`
-}
+// ProjectsPatchJSONRequestBody defines body for ProjectsPatch for application/json ContentType.
+type ProjectsPatchJSONRequestBody = ProjectBase
 
-// PermissionsCreateJSONBody defines parameters for PermissionsCreate.
-type PermissionsCreateJSONBody = PermissionBase
-
-// PermissionsUpdateJSONBody defines parameters for PermissionsUpdate.
-type PermissionsUpdateJSONBody = PermissionUpdatable
-
-// RolesListParams defines parameters for RolesList.
-type RolesListParams struct {
-	// Pageable properties of pagination parameters
-	Pageable *Pageable `form:"pageable,omitempty" json:"pageable,omitempty"`
-
-	// SearchFilter search filter condition for list roles
-	SearchFilter RoleSearchFilter `form:"searchFilter" json:"searchFilter"`
-}
-
-// RolesCreateJSONBody defines parameters for RolesCreate.
-type RolesCreateJSONBody = RoleBase
-
-// RolesUpdateJSONBody defines parameters for RolesUpdate.
-type RolesUpdateJSONBody = RoleUpdatable
-
-// ActionsCreateJSONRequestBody defines body for ActionsCreate for application/json ContentType.
-type ActionsCreateJSONRequestBody = ActionsCreateJSONBody
-
-// ActionsPatchJSONRequestBody defines body for ActionsPatch for application/json ContentType.
-type ActionsPatchJSONRequestBody = ActionBase
-
-// ActionsUpdateJSONRequestBody defines body for ActionsUpdate for application/json ContentType.
-type ActionsUpdateJSONRequestBody = ActionsUpdateJSONBody
-
-// PermissionsCreateJSONRequestBody defines body for PermissionsCreate for application/json ContentType.
-type PermissionsCreateJSONRequestBody = PermissionsCreateJSONBody
-
-// PermissionsPatchJSONRequestBody defines body for PermissionsPatch for application/json ContentType.
-type PermissionsPatchJSONRequestBody = PermissionUpdatable
-
-// PermissionsUpdateJSONRequestBody defines body for PermissionsUpdate for application/json ContentType.
-type PermissionsUpdateJSONRequestBody = PermissionsUpdateJSONBody
-
-// RolesCreateJSONRequestBody defines body for RolesCreate for application/json ContentType.
-type RolesCreateJSONRequestBody = RolesCreateJSONBody
-
-// RolesPatchJSONRequestBody defines body for RolesPatch for application/json ContentType.
-type RolesPatchJSONRequestBody = RoleUpdatable
-
-// RolesUpdateJSONRequestBody defines body for RolesUpdate for application/json ContentType.
-type RolesUpdateJSONRequestBody = RolesUpdateJSONBody
+// ProjectsUpdateJSONRequestBody defines body for ProjectsUpdate for application/json ContentType.
+type ProjectsUpdateJSONRequestBody = ProjectsUpdateJSONBody

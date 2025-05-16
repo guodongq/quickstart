@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y tini
 COPY --from=quickstart-build /go/src/github.com/guodongq/quickstart/dist/quickstart* /usr/local/bin/
 
 RUN ln -s /usr/local/bin/quickstart /usr/local/bin/go-grpc && \
-    ln -s /usr/local/bin/quickstart /usr/local/bin/cli
+    ln -s /usr/local/bin/quickstart /usr/local/bin/cli && \
+    ln -s /usr/local/bin/quickstart /usr/local/bin/academy
 
 ENTRYPOINT ["/usr/bin/tini", "--"]

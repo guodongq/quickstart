@@ -14,11 +14,11 @@ type Identifiable interface {
 	GetID() string
 }
 
-type BasePO struct {
+type BaseModel struct {
 	ID string `bson:"_id"`
 }
 
-func (b BasePO) GetID() string {
+func (b BaseModel) GetID() string {
 	return b.ID
 }
 

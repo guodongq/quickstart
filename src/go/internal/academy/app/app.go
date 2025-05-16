@@ -2,11 +2,12 @@ package app
 
 import (
 	"github.com/guodongq/quickstart/internal/academy/app/commands"
-	"github.com/guodongq/quickstart/internal/academy/app/event"
 	"github.com/guodongq/quickstart/internal/academy/app/queries"
-	"github.com/guodongq/quickstart/internal/academy/domain/environment"
-	"github.com/guodongq/quickstart/internal/academy/domain/project"
+	"github.com/guodongq/quickstart/internal/academy/infra/persistence/mongo"
 	"github.com/guodongq/quickstart/pkg/bus"
+	"github.com/guodongq/quickstart/pkg/log"
+	"github.com/guodongq/quickstart/pkg/metrics"
+	"github.com/guodongq/quickstart/pkg/provider/mongodb"
 )
 
 type App struct {
@@ -22,31 +23,33 @@ type Queries struct {
 	GetProjectByID queries.GetProjectByIDHandler
 }
 
-// NewApp creates a new application instance
-func NewApp(
-	bus bus.EventBus,
+// NewApplication creates a new application instance
+func NewApplication(
+	mongoRepository mongodb.MongoRepository,
 ) *App {
 	var (
-		createProject   commands.CreateProjectHandler
-		getProjectByID  queries.GetProjectByIDHandler
-		projectRepo     project.Repository
-		environmentRepo environment.Repository
+		projectRepository     = mongo.NewProjectRepository(mongoRepository)
+		environmentRepository = mongo.NewEnvironmentRepository(mongoRepository)
+
+		eventBus      = bus.New()
+		metricsClient = metrics.New()
+		logger        = log.DefaultLogger()
 	)
 
 	// register event handlers
-	for _, eventRegistry := range []event.EventRegistry{
-		event.NewProjectEventRegistry(bus, projectRepo),
-		event.NewEnvironmentEventRegistry(bus, environmentRepo),
+	for _, eventRegistry := range []EventRegistry{
+		NewProjectEventRegistry(eventBus, projectRepository),
+		NewEnvironmentEventRegistry(eventBus, environmentRepository),
 	} {
 		eventRegistry.RegisterHandlers()
 	}
 
 	return &App{
 		Commands: Commands{
-			CreateProject: createProject,
+			CreateProject: commands.NewCreateProjectHandler(projectRepository, logger, metricsClient),
 		},
 		Queries: Queries{
-			GetProjectByID: getProjectByID,
+			GetProjectByID: queries.NewGetProjectByIDHandler(projectRepository, logger, metricsClient),
 		},
 	}
 }

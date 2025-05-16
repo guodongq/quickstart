@@ -6,55 +6,23 @@ servers:
   - url: 'https://localhost:8080/api'
   - url: 'https://api.quickstart.com/api'
 tags:
-  - name: Actions
-    description: Action management
-  - name: Permissions
-    description: Permissions management
-  - name: Roles
-    description: Roles management
+  - name: Projects
+    description: Project management
 paths:
-  /v1/actions:
+  /v1/projects:
     post:
-      $ref: 'resources/role/actions_create.yml'
+      $ref: 'resources/project/projects_create.yml'
     get:
-      $ref: 'resources/role/actions_list.yml'
-  /v1/actions/{action_id}:
+      $ref: 'resources/project/projects_list.yml'
+  /v1/projects/{project_id}:
     get:
-      $ref: 'resources/role/actions_get.yml'
+      $ref: 'resources/project/projects_get.yml'
     put:
-      $ref: 'resources/role/actions_update.yml'
+      $ref: 'resources/project/projects_update.yml'
     patch:
-      $ref: 'resources/role/actions_patch.yml'
+      $ref: 'resources/project/projects_patch.yml'
     delete:
-      $ref: 'resources/role/actions_delete.yml'
-  /v1/permissions:
-    post:
-      $ref: 'resources/role/permissions_create.yml'
-    get:
-      $ref: 'resources/role/permissions_list.yml'
-  /v1/permissions/{permission_id}:
-    get:
-      $ref: 'resources/role/permissions_get.yml'
-    put:
-      $ref: 'resources/role/permissions_update.yml'
-    patch:
-      $ref: 'resources/role/permissions_patch.yml'
-    delete:
-      $ref: 'resources/role/permissions_delete.yml'
-  /v1/roles:
-    post:
-      $ref: 'resources/role/roles_create.yml'
-    get:
-      $ref: 'resources/role/roles_list.yml'
-  /v1/roles/{role_id}:
-    get:
-      $ref: 'resources/role/roles_get.yml'
-    put:
-      $ref: 'resources/role/roles_update.yml'
-    patch:
-      $ref: 'resources/role/roles_patch.yml'
-    delete:
-      $ref: 'resources/role/roles_delete.yml'
+      $ref: 'resources/project/projects_delete.yml'
 components:
   securitySchemes:
     bearer_auth:

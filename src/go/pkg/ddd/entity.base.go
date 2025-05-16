@@ -15,7 +15,7 @@ func NewBaseEntity[ID comparable](id ID) *BaseEntity[ID] {
 	}
 }
 
-func (e *BaseEntity[ID]) ID() any {
+func (e *BaseEntity[ID]) ID() ID {
 	return e.Id
 }
 

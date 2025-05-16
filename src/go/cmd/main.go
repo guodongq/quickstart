@@ -12,6 +12,10 @@ import (
 
 const binaryNameEnv = "QUICKSTART_BINARY_NAME"
 
+func init() {
+	_ = os.Setenv(binaryNameEnv, "academy")
+}
+
 func main() {
 	var command *cobra.Command
 

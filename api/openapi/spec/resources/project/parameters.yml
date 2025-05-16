@@ -1,0 +1,19 @@
+project_id:
+  name: project_id
+  description: A unique identifier for a project.
+  in: path
+  required: true
+  schema:
+    format: uuid
+    minimum: 1
+    type: string
+  style: simple
+
+project_search_filter:
+  name: searchFilter
+  description: search filter condition for list projects
+  in: query
+  required: true
+  schema:
+    $ref: './models/project.yml#/project_base'
+  style: form

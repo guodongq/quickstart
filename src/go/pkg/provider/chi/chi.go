@@ -43,7 +43,7 @@ func configureMiddlewares(router chi.Router, options *ChiOptions) http.Handler {
 	//router.Use(logger.NewStructuredLogger(logger.DefaultLogger()))
 	router.Use(Logger(true))
 	router.Use(middleware.Recoverer)
-	router.Mount("/debug", middleware.Profiler())
+	//router.Mount("/debug", middleware.Profiler())
 	router.Use(
 		middleware.SetHeader("X-Content-Type-Options", "nosniff"),
 		middleware.SetHeader("X-Frame-Options", "deny"),

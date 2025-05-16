@@ -8,8 +8,8 @@ import (
 )
 
 type EnvironmentPO struct {
-	mongo.BasePO `bson:",inline"`
-	Name         string `bson:"name"`
+	mongo.BaseModel `bson:",inline"`
+	Name            string `bson:"name"`
 }
 
 func fromEnvironment(entity *environment.Environment) EnvironmentPO {
