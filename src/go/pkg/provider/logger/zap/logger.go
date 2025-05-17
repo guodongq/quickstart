@@ -28,11 +28,11 @@ func New(optionFuncs ...func(*ZapLoggerOptions)) *Zap {
 	defaultOptions := getDefaultZapLoggerOptions()
 	options := &defaultOptions
 
+	LoadEnvConfig().Options()(options)
+
 	for _, optionFunc := range optionFuncs {
 		optionFunc(options)
 	}
-
-	LoadEnvConfig().Options()(options)
 
 	core := zapcore.NewCore(
 		options.Encoder,

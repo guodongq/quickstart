@@ -34,6 +34,18 @@ func WithProbesOptionsEnabled() func(*ProbesOptions) {
 	}
 }
 
+func WithProbesOptionsDisabled() func(*ProbesOptions) {
+	return func(o *ProbesOptions) {
+		o.Enabled = false
+	}
+}
+
+func WithProbesOptionsEnable(enabled bool) func(*ProbesOptions) {
+	return func(o *ProbesOptions) {
+		o.Enabled = enabled
+	}
+}
+
 func WithProbesOptionsLiveEndpoint(endpoint string) func(*ProbesOptions) {
 	return func(o *ProbesOptions) {
 		o.LivenessEndpoint = endpoint

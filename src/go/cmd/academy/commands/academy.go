@@ -2,13 +2,12 @@ package commands
 
 import (
 	generic_gin "github.com/gin-gonic/gin"
-	"github.com/guodongq/quickstart/config"
 	ddd_app "github.com/guodongq/quickstart/internal/academy/app"
 	ports "github.com/guodongq/quickstart/internal/academy/interfaces/http"
 	genapi "github.com/guodongq/quickstart/pkg/api/genapi/server"
 	"github.com/guodongq/quickstart/pkg/provider/app"
 	"github.com/guodongq/quickstart/pkg/provider/gin"
-	"github.com/guodongq/quickstart/pkg/provider/logger/logrus"
+	"github.com/guodongq/quickstart/pkg/provider/logger/zap"
 	"github.com/guodongq/quickstart/pkg/provider/mongodb"
 	"github.com/guodongq/quickstart/pkg/provider/probes"
 	"github.com/guodongq/quickstart/pkg/stack"
@@ -21,15 +20,13 @@ func NewCommand() *cobra.Command {
 		Short:             "A academy example",
 		DisableAutoGenTag: true,
 		Run: func(c *cobra.Command, _ []string) {
-			config := config.NewConfigFromEnv()
-
 			st := stack.New()
 			defer st.MustClose()
 
-			loggerProvider := logrus.New()
+			loggerProvider := zap.New()
 			st.MustInit(loggerProvider)
 
-			appProvider := app.New(app.WithAppOptionsBasePath(config.Academy.BaseURL))
+			appProvider := app.New()
 			st.MustInit(appProvider)
 
 			probesProvider := probes.New(appProvider)
