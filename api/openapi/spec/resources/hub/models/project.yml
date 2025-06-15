@@ -1,0 +1,29 @@
+project_base:
+  type: object
+  properties:
+    name:
+      type: string
+      maxLength: 175
+      example: my-web-api
+      description: The human-readable name for the project. The maximum length is
+        175 characters and the name must be unique.
+
+    description:
+      type: string
+      maxLength: 255
+      example: My website API
+      description: The description of the project. The maximum length is 255
+        characters.
+
+project:
+  allOf:
+    - type: object
+      properties:
+        id:
+          type: string
+          #          format: uuid
+          readOnly: true
+          example: 4e1bfbc3-dc3e-41f2-a18f-1b4d7ba71679
+          description: The unique universal identifier of this project.
+    - $ref: '#/project_base'
+    - $ref: '../../../shared/meta.yml'

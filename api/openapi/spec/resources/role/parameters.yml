@@ -1,0 +1,77 @@
+action_id:
+  name: action_id
+  description: A unique identifier for a action.
+  in: path
+  required: true
+  schema:
+    format: uuid
+    minimum: 1
+    type: string
+  style: simple
+
+action_search_filter:
+  name: searchFilter
+  description: search filter condition for list actions
+  in: query
+  required: true
+  schema:
+    $ref: './models/action.yml#/action_base'
+  style: form
+
+permission_id:
+  name: permission_id
+  description: A unique identifier for a permission.
+  in: path
+  required: true
+  schema:
+    format: uuid
+    minimum: 1
+    type: string
+  style: simple
+
+permission_search_filter:
+  name: searchFilter
+  description: search filter condition for list actions
+  in: query
+  required: true
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      tag:
+        type: string
+  style: form
+
+role_id:
+  name: role_id
+  description: A unique identifier for a role.
+  in: path
+  required: true
+  schema:
+    format: uuid
+    minimum: 1
+    type: string
+  style: simple
+
+role_search_filter:
+  name: searchFilter
+  description: search filter condition for list roles
+  in: query
+  required: true
+  schema:
+    type: object
+    properties:
+      name:
+        type: string
+      visibility:
+        type: string
+      tag:
+        type: string
+      type:
+        type: string
+      node_id:
+        type: string
+  style: form

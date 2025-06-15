@@ -1,0 +1,44 @@
+operationId: actions_create
+
+summary: Create an Action
+
+description: Create a new action.
+
+tags:
+  - Actions
+
+requestBody:
+  required: true
+
+  content:
+    application/json:
+      schema:
+        allOf:
+          - $ref: 'models/action.yml#/action_base'
+        required:
+          - code
+          - service_id
+
+responses:
+  '201':
+    $ref: 'responses/existing_action.yml'
+
+  '401':
+    $ref: '../../shared/responses/unauthorized.yml'
+
+  '403':
+    $ref: '../../shared/responses/forbidden.yml'
+
+  '429':
+    $ref: '../../shared/responses/too_many_requests.yml'
+
+  '500':
+    $ref: '../../shared/responses/server_error.yml'
+
+  default:
+    $ref: '../../shared/responses/unexpected_error.yml'
+
+security:
+  - bearer_auth:
+      - 'action:create'
+#  - apikey_auth: [ ]

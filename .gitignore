@@ -1,0 +1,5 @@
+bin/
+src/go/dist
+.idea/
+api/openapi/node_modules/
+

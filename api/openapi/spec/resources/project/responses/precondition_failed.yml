@@ -1,0 +1,9 @@
+description: Only an empty action can be deleted.
+
+content:
+  application/json:
+    schema:
+      $ref: '../../../shared/models/error.yml'
+    example:
+      id: precondition_failed
+      message: cannot delete an action with resources. move or remove the resources first

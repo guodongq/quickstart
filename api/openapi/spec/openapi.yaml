@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: Quickstart Definition - OpenAPI 3.0
+  version: '1.0.1'
+servers:
+  - url: 'https://localhost:8080/api'
+  - url: 'https://api.quickstart.com/api'
+tags:
+  - name: Projects
+    description: Project management
+paths:
+  /v1/projects:
+    post:
+      $ref: 'resources/project/projects_create.yml'
+    get:
+      $ref: 'resources/project/projects_list.yml'
+  /v1/projects/{project_id}:
+    get:
+      $ref: 'resources/project/projects_get.yml'
+    put:
+      $ref: 'resources/project/projects_update.yml'
+    patch:
+      $ref: 'resources/project/projects_patch.yml'
+    delete:
+      $ref: 'resources/project/projects_delete.yml'
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+    basic_auth:
+      type: http
+      scheme: basic
+    apikey_auth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    oauth_user:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8080/api/v1/oauth/authorize
+          tokenUrl: http://localhost:8080/api/v1/oauth/token
+          scopes:
+            read: Read access
+            write: Write access
+    oauth_app:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: http://localhost:8080/api/v1/oauth/token
+          scopes:
+            board:read: Read the board
+security:
+  - bearer_auth: [ ]
+  - apikey_auth: [ ]

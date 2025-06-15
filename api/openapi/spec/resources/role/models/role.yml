@@ -1,0 +1,55 @@
+role:
+  type: object
+  allOf:
+    - type: object
+      properties:
+        id:
+          $ref: '../../../shared/attributes/identity.yml'
+    - $ref: '#/role_base'
+    - type: object
+      properties:
+        meta:
+          $ref: '../../../shared/models/meta_properties.yml'
+  required:
+    - id
+    - name
+    - permissions
+    - visibility
+    - type
+    - tags
+
+role_base:
+  type: object
+  allOf:
+    - $ref: '#/role_updatable'
+    - type: object
+      properties:
+        type:
+          type: string
+        node_id:
+          type: string
+
+
+role_updatable:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The name of permission
+    description:
+      type: string
+      description: The description of role
+    permissions:
+      type: array
+      items:
+        type: string
+    visibility:
+      type: string
+      examples:
+        - "global"
+        - "node"
+        - "subtree"
+    tags:
+      type: array
+      items:
+        type: string

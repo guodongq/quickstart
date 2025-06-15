@@ -1,0 +1,27 @@
+project:
+  type: object
+  allOf:
+    - type: object
+      properties:
+        id:
+          $ref: '../../../shared/attributes/uuid.yml'
+    - $ref: '#/project_base'
+    - type: object
+      properties:
+        meta:
+          $ref: '../../../shared/models/meta_properties.yml'
+  required:
+    - name
+    - description
+    - meta
+
+project_base:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The name of project
+
+    description:
+      type: string
+      description: A description of the project

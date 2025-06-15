@@ -1,0 +1,19 @@
+description: >-
+  The response will be a JSON object with a key called `roles`.
+  The value of this will be an object with the standard role attributes
+
+content:
+  application/json:
+    schema:
+      allOf:
+        - type: object
+          properties:
+            pageable:
+              $ref: '../../../shared/models/page_properties.yml'
+            total:
+              $ref: '../../../shared/attributes/total.yml'
+            content:
+              type: array
+              items:
+                $ref: '../models/role.yml#/role'
+              description: Array of roles.

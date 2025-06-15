@@ -1,0 +1,55 @@
+type: object
+
+description: Information about the response itself.
+
+properties:
+  created_by:
+    type: string
+    format: uuid
+    readOnly: true
+    example: "7b24ac93-547f-4bbc-b6ed-26ce66433d1d"
+    description: The user who created the resource.
+
+  created_at:
+    type: string
+    format: date-time
+    readOnly: true
+    example: "2018-09-27T20:10:35Z"
+    description: A time value given in ISO8601 combined date and time format
+      that represents when the resource was created.
+
+  updated_by:
+    type: string
+    format: uuid
+    readOnly: true
+    example: "7b24ac93-547f-4bbc-b6ed-26ce66433d1d"
+    description: The user who updated the resource.
+
+  updated_at:
+    type: string
+    format: date-time
+    readOnly: true
+    example: "2018-09-27T20:10:35Z"
+    description: A time value given in ISO8601 combined date and time format
+      that represents when the resource was updated.
+
+  deleted_by:
+    type: string
+    format: uuid
+    readOnly: true
+    example: "7b24ac93-547f-4bbc-b6ed-26ce66433d1d"
+    description: The user who deleted the resource.
+
+  deleted_at:
+    type: string
+    format: date-time
+    readOnly: true
+    example: "2018-09-27T20:10:35Z"
+    description: A time value given in ISO8601 combined date and time format
+      that represents when the resource was deleted.
+
+  version:
+    type: integer
+    readOnly: true
+    example: 1
+    description: The version of the resource.

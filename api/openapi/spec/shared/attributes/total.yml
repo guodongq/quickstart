@@ -1,0 +1,5 @@
+type: integer
+description: Total number of records available.
+format: int32
+minimum: 0
+example: 100

@@ -1,0 +1,31 @@
+type: object
+
+properties:
+  page:
+    type: integer
+    format: int32
+    readOnly: true
+    example: 1
+    description: The current page number in the paginated response.
+
+  per_page:
+    type: integer
+    format: int32
+    readOnly: true
+    example: 20
+    description: The number of items per page in the paginated response.
+
+  sort:
+    type: array
+    items:
+      type: string
+    readOnly: true
+    example: [ '+created_at' ]
+    description: The field by which the results are sorted.
+
+  total:
+    type: integer
+    format: int32
+    readOnly: true
+    example: 100
+    description: The total number of items available across all pages.

@@ -1,0 +1,487 @@
+openapi: 3.0.3
+info:
+  title: Quickstart Definition - OpenAPI 3.0
+  version: 1.0.1
+servers:
+  - url: https://localhost:8080/api
+  - url: https://api.quickstart.com/api
+security:
+  - bearer_auth: []
+  - apikey_auth: []
+tags:
+  - name: Projects
+    description: Project management
+paths:
+  /v1/projects:
+    post:
+      operationId: projects_create
+      summary: Create a Project
+      description: Create a new project.
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/project_base'
+              required:
+                - name
+      responses:
+        '201':
+          $ref: '#/components/responses/existing_project'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+      security:
+        - bearer_auth:
+            - project:create
+    get:
+      operationId: projects_list
+      summary: List All Projects
+      description: To list all your projects, send a GET request to `/v1/projects`.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/project_search_filter'
+      responses:
+        '200':
+          $ref: '#/components/responses/projects_list'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+  /v1/projects/{project_id}:
+    get:
+      operationId: projects_get
+      summary: Retrieve an Existing Project
+      description: To get an project, send a GET request to `/v1/projects/$PROJECT_ID`
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/project_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_project'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    put:
+      operationId: projects_update
+      summary: Update a Project
+      description: To update an project, send a PUT request to `/v1/projects/$PROJECT_ID`. All of the following attributes must be sent.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/project_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/project_base'
+              required:
+                - name
+                - description
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_project'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    patch:
+      operationId: projects_patch
+      summary: Patch a Project
+      description: To update only specific attributes of an project, send a PATCH request to `/v1/projects/$PROJECT_ID`. At least one of the following attributes needs to be sent.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/project_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/project_base'
+              anyOf:
+                - required:
+                    - name
+                - required:
+                    - description
+      responses:
+        '200':
+          $ref: '#/components/responses/existing_project'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+    delete:
+      operationId: projects_delete
+      summary: Delete an Existing Project
+      description: |
+        To delete an project, send a DELETE requests to `/v1/projects/$PROJECT_ID`. To
+        be deleted, an project must not have any resources assigned to it. Any existing
+        resources must first be reassigned or destroyed, or you will receive a 412 error.
+
+        A successful request will receive a 204 status code with no body in response.
+        This indicates that the request was processed successfully.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/project_id'
+      responses:
+        '204':
+          $ref: '#/components/responses/no_content'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '412':
+          $ref: '#/components/responses/precondition_failed'
+        '429':
+          $ref: '#/components/responses/too_many_requests'
+        '500':
+          $ref: '#/components/responses/server_error'
+        default:
+          $ref: '#/components/responses/unexpected_error'
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+    basic_auth:
+      type: http
+      scheme: basic
+    apikey_auth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    oauth_user:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8080/api/v1/oauth/authorize
+          tokenUrl: http://localhost:8080/api/v1/oauth/token
+          scopes:
+            read: Read access
+            write: Write access
+    oauth_app:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: http://localhost:8080/api/v1/oauth/token
+          scopes:
+            board:read: Read the board
+  parameters:
+    page:
+      in: query
+      name: page
+      required: false
+      description: Which 'page' of paginated results to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    per_page:
+      in: query
+      name: per_page
+      required: false
+      description: Number of items returned per page
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+        maximum: 200
+      example: 2
+    sort:
+      in: query
+      name: sort
+      required: false
+      description: Sorting criteria for the list, using a "+" or "-" prefix to specify ascending or descending order.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(\+|-)[a-zA-Z0-9_]+$
+      example:
+        - +name
+        - '-age'
+        - address
+    project_search_filter:
+      name: searchFilter
+      description: search filter condition for list projects
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/project_base'
+      style: form
+    project_id:
+      name: project_id
+      description: A unique identifier for a project.
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        minimum: 1
+      style: simple
+  schemas:
+    project_base:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of project
+        description:
+          type: string
+          description: A description of the project
+    error:
+      type: object
+      properties:
+        id:
+          description: A short identifier corresponding to the HTTP status code returned. For  example, the ID for a response returning a 404 status code would be "not_found."
+          type: string
+          example: not_found
+        message:
+          description: A message providing additional information about the error, including  details to help resolve it when possible.
+          type: string
+          example: The resource you were accessing could not be found.
+        request_id:
+          description: Optionally, some endpoints may include a request ID that should be  provided when reporting bugs or opening support tickets to help  identify the issue.
+          type: string
+          example: 4d9d8375-3c56-4925-a3e7-eb137fed17e9
+      required:
+        - id
+        - message
+    pages:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 1
+          description: The current page number in the paginated response.
+        per_page:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 20
+          description: The number of items per page in the paginated response.
+        sort:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          example:
+            - +created_at
+          description: The field by which the results are sorted.
+        total:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 100
+          description: The total number of items available across all pages.
+    uuid:
+      type: string
+      format: uuid
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+      description: The unique identifier of the resource in UUID format
+      example: 123e4567-e89b-12d3-a456-426614174000
+    meta_properties:
+      type: object
+      description: Information about the response itself.
+      properties:
+        created_by:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 7b24ac93-547f-4bbc-b6ed-26ce66433d1d
+          description: The user who created the resource.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          example: '2018-09-27T20:10:35Z'
+          description: A time value given in ISO8601 combined date and time format that represents when the resource was created.
+        updated_by:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 7b24ac93-547f-4bbc-b6ed-26ce66433d1d
+          description: The user who updated the resource.
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          example: '2018-09-27T20:10:35Z'
+          description: A time value given in ISO8601 combined date and time format that represents when the resource was updated.
+        deleted_by:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 7b24ac93-547f-4bbc-b6ed-26ce66433d1d
+          description: The user who deleted the resource.
+        deleted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          example: '2018-09-27T20:10:35Z'
+          description: A time value given in ISO8601 combined date and time format that represents when the resource was deleted.
+        version:
+          type: integer
+          readOnly: true
+          example: 1
+          description: The version of the resource.
+    project:
+      type: object
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/uuid'
+        - $ref: '#/components/schemas/project_base'
+        - type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/meta_properties'
+      required:
+        - name
+        - description
+        - meta
+  responses:
+    unexpected_error:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: example_error
+            message: some error message
+    projects_list:
+      description: The response will be a JSON object with a key called `projects`. The value of this will be an object with the standard project attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  pageable:
+                    $ref: '#/components/schemas/pages'
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/project'
+                    description: Array of actions.
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: unauthorized
+            message: Unable to authenticate you.
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: forbidden
+            message: You are not allowed to access this resource.
+    too_many_requests:
+      description: API Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: too_many_requests
+            message: API Rate limit exceeded.
+    server_error:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: server_error
+            message: Unexpected server-side error
+    existing_project:
+      description: The response will be a JSON object with a key called `project`. The value of this will be an object with the standard project attributes
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/project'
+    not_found:
+      description: The resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: not_found
+            message: The resource you requested could not be found.
+    no_content:
+      description: The action was successful and the response body is empty.
+    precondition_failed:
+      description: Only an empty action can be deleted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            id: precondition_failed
+            message: cannot delete an action with resources. move or remove the resources first

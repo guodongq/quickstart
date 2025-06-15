@@ -1,0 +1,17 @@
+description: >-
+  The response will be a JSON object with a key called `projects`.
+  The value of this will be an object with the standard project attributes
+
+content:
+  application/json:
+    schema:
+      allOf:
+        - type: object
+          properties:
+            pageable:
+              $ref: '../../../shared/pages.yml'
+            content:
+              type: array
+              items:
+                $ref: '../models/project.yml#/project'
+              description: Array of actions.
