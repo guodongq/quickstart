@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"github.com/getkin/kin-openapi/openapi3filter"
 	generic_gin "github.com/gin-gonic/gin"
 	application "github.com/guodongq/quickstart/internal/academy/app"
 	"github.com/guodongq/quickstart/internal/academy/interfaces/http"
@@ -12,7 +11,6 @@ import (
 	"github.com/guodongq/quickstart/pkg/provider/mongodb"
 	"github.com/guodongq/quickstart/pkg/provider/probes"
 	"github.com/guodongq/quickstart/pkg/stack"
-	"github.com/oapi-codegen/gin-middleware"
 	"github.com/spf13/cobra"
 )
 
@@ -37,25 +35,25 @@ func NewCommand() *cobra.Command {
 			mongoProvider := mongodb.New(appProvider, probesProvider)
 			st.MustInit(mongoProvider)
 
-			mongoRepository := mongodb.NewMongoRepository(mongoProvider)
+			mongoRepository := mongodb.NewMongoRepository(mongoProvider, mongodb.WithDatabaseNameGetter(func() string { return "Zone" }))
 			newApplication := application.NewApplication(mongoRepository)
 
 			ginProvider := gin.New(gin.WithGinOptionsRegisterHandlers(func(engine *generic_gin.Engine) error {
-				swagger, err := openapi.GetSwagger()
-				if err != nil {
-					return err
-				}
-
-				options := ginmiddleware.Options{
-					Options: openapi3filter.Options{
-						ExcludeRequestBody:    false,
-						ExcludeResponseBody:   false,
-						IncludeResponseStatus: true,
-						MultiError:            true,
-					},
-				}
-
-				engine.Use(ginmiddleware.OapiRequestValidatorWithOptions(swagger, &options))
+				//swagger, err := openapi.GetSwagger()
+				//if err != nil {
+				//	return err
+				//}
+				//
+				//options := ginmiddleware.Options{
+				//	Options: openapi3filter.Options{
+				//		ExcludeRequestBody:    false,
+				//		ExcludeResponseBody:   false,
+				//		IncludeResponseStatus: true,
+				//		MultiError:            true,
+				//	},
+				//}
+				//
+				//engine.Use(ginmiddleware.OapiRequestValidatorWithOptions(swagger, &options))
 
 				openapi.RegisterHandlersWithOptions(
 					engine,

@@ -5,6 +5,7 @@ import (
 	"github.com/guodongq/quickstart/internal/academy/app/dto"
 	"github.com/guodongq/quickstart/internal/academy/domain/project"
 	"github.com/guodongq/quickstart/pkg/bus"
+	"github.com/guodongq/quickstart/pkg/ddd"
 	"github.com/guodongq/quickstart/pkg/decorator"
 	"github.com/guodongq/quickstart/pkg/log"
 	"github.com/guodongq/quickstart/pkg/types"
@@ -34,18 +35,18 @@ func NewCreateProjectHandler(
 }
 
 func (c createProjectHandler) Handle(ctx context.Context, cmd dto.CreateProject) error {
-	entity := project.Project{
-		//BaseEntity:  ddd.NewBaseEntity(idgen.MustUUIDGenerator(cmd.ID)),
-		Name:        "",
-		Description: "",
-		Limitation:  project.Limitation{},
-		Metrics:     project.Metrics{},
-		Meta:        types.Meta{},
-	}
-	_ = entity
+	entity := project.NewProject(
+		project.WithProjectBaseEntity(ddd.NewBaseEntity(cmd.ID)),
+		project.WithProjectName(cmd.Name),
+		project.WithProjectDescription(cmd.Description),
+		project.WithProjectMeta(types.NewMetaWithDefaults(ctx)),
+	)
 
-	err := c.eventBus.Publish(ctx, project.NewProjectCreatedEvent(entity.Id, entity.Name))
-	if err != nil {
+	if err := c.projectRepository.CreateProject(ctx, entity); err != nil {
+		return err
+	}
+
+	if err := c.eventBus.Publish(ctx, project.NewProjectCreatedEvent(entity.Id, entity.Name)); err != nil {
 		return err
 	}
 

@@ -52,11 +52,11 @@ type MetaProperties struct {
 
 // Pages defines model for pages.
 type Pages struct {
-	// Page The current page number in the paginated response.
-	Page *int32 `json:"page,omitempty"`
+	// Limit The number of items per page in the paginated response.
+	Limit *int32 `json:"limit,omitempty"`
 
-	// PerPage The number of items per page in the paginated response.
-	PerPage *int32 `json:"per_page,omitempty"`
+	// Skip The current page number in the paginated response.
+	Skip *int32 `json:"skip,omitempty"`
 
 	// Sort The field by which the results are sorted.
 	Sort *[]string `json:"sort,omitempty"`
@@ -92,17 +92,17 @@ type ProjectBase struct {
 // Uuid The unique identifier of the resource in UUID format
 type Uuid = openapi_types.UUID
 
-// Page defines model for page.
-type Page = int
-
-// PerPage defines model for per_page.
-type PerPage = int
+// Limit defines model for limit.
+type Limit = int
 
 // ProjectId defines model for project_id.
 type ProjectId = openapi_types.UUID
 
 // ProjectSearchFilter defines model for project_search_filter.
 type ProjectSearchFilter = ProjectBase
+
+// Skip defines model for skip.
+type Skip = int
 
 // Sort defines model for sort.
 type Sort = []string
@@ -140,11 +140,11 @@ type UnexpectedError = Error
 
 // ProjectsListParams defines parameters for ProjectsList.
 type ProjectsListParams struct {
-	// Page Which 'page' of paginated results to return.
-	Page *Page `form:"page,omitempty" json:"page,omitempty"`
+	// Skip Which 'page' of paginated results to return.
+	Skip *Skip `form:"skip,omitempty" json:"skip,omitempty"`
 
-	// PerPage Number of items returned per page
-	PerPage *PerPage `form:"per_page,omitempty" json:"per_page,omitempty"`
+	// Limit Number of items returned per page
+	Limit *Limit `form:"limit,omitempty" json:"limit,omitempty"`
 
 	// Sort Sorting criteria for the list, using a "+" or "-" prefix to specify ascending or descending order.
 	Sort *Sort `form:"sort,omitempty" json:"sort,omitempty"`

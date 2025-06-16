@@ -2,28 +2,46 @@ package project
 
 import (
 	"github.com/guodongq/quickstart/pkg/ddd"
-	"github.com/guodongq/quickstart/pkg/idgen"
 	"github.com/guodongq/quickstart/pkg/types"
 )
 
 // Project represents a project entity
 type Project struct {
-	*ddd.BaseEntity[idgen.Generator]
+	*ddd.BaseEntity[string]
 	Name        string
 	Description string
 
-	Limitation Limitation
-	Metrics    Metrics
-
-	Meta types.Meta
+	Meta *types.Meta
 }
 
-type (
-	Limitation struct {
-		Cpu    int64
-		Memory int64
+func NewProject(optionFuncs ...func(*Project)) *Project {
+	var project Project
+	for _, optionFunc := range optionFuncs {
+		optionFunc(&project)
 	}
+	return &project
+}
 
-	Metrics struct {
+func WithProjectBaseEntity(baseEntity *ddd.BaseEntity[string]) func(*Project) {
+	return func(project *Project) {
+		project.BaseEntity = baseEntity
 	}
-)
+}
+
+func WithProjectName(name string) func(*Project) {
+	return func(project *Project) {
+		project.Name = name
+	}
+}
+
+func WithProjectDescription(description string) func(*Project) {
+	return func(project *Project) {
+		project.Description = description
+	}
+}
+
+func WithProjectMeta(meta *types.Meta) func(*Project) {
+	return func(project *Project) {
+		project.Meta = meta
+	}
+}

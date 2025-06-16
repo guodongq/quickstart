@@ -2,16 +2,15 @@ package project
 
 import (
 	"context"
-	"github.com/guodongq/quickstart/pkg/idgen"
 )
 
 type Repository interface {
 	CreateProject(ctx context.Context, entity *Project) error
-	GetProjectByID(ctx context.Context, id idgen.Generator) (*Project, error)
+	GetProjectByID(ctx context.Context, id string) (*Project, error)
 	UpdateProjectByID(
 		ctx context.Context,
-		id idgen.Generator,
+		id string,
 		updateFn func(entity *Project) (*Project, error),
 	) error
-	DeleteProjectByID(ctx context.Context, id idgen.Generator) error
+	DeleteProjectByID(ctx context.Context, id string) error
 }

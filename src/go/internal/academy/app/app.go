@@ -31,12 +31,19 @@ func NewApplication(
 	mongoRepository mongodb.MongoRepository,
 ) *App {
 	var (
-		projectRepository     = mongo.NewProjectRepository(mongoRepository)
-		environmentRepository = mongo.NewEnvironmentRepository(mongoRepository)
-
 		eventBus      = bus.New()
 		metricsClient = metrics.New()
 		logger        = log.DefaultLogger()
+	)
+
+	// project
+	var (
+		projectRepository = mongo.NewProjectRepository(mongoRepository)
+	)
+
+	// environment
+	var (
+		environmentRepository = mongo.NewEnvironmentRepository(mongoRepository)
 	)
 
 	// register event handlers

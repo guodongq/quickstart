@@ -18,6 +18,12 @@ type BaseModel struct {
 	ID string `bson:"_id"`
 }
 
+func NewBaseModel(id string) BaseModel {
+	return BaseModel{
+		ID: id,
+	}
+}
+
 func (b BaseModel) GetID() string {
 	return b.ID
 }

@@ -28,7 +28,11 @@ func NewGetProjectByIDHandler(
 	)
 }
 
-func (c getProjectByIDHandler) Handle(ctx context.Context, q dto.GetProjectByID) (dto.Project, error) {
-	//TODO implement me
-	panic("implement me")
+func (c getProjectByIDHandler) Handle(ctx context.Context, query dto.GetProjectByID) (dto.Project, error) {
+	resp, err := c.projectRepository.GetProjectByID(ctx, query.ID)
+	if err != nil {
+		return dto.Project{}, err
+	}
+
+	return dto.NewProjectDto(*resp), nil
 }

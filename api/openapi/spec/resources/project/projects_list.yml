@@ -8,8 +8,8 @@ tags:
   - Projects
 
 parameters:
-  - $ref: '../../shared/parameters.yml#/page'
-  - $ref: '../../shared/parameters.yml#/per_page'
+  - $ref: '../../shared/parameters.yml#/skip'
+  - $ref: '../../shared/parameters.yml#/limit'
   - $ref: '../../shared/parameters.yml#/sort'
   - $ref: './parameters.yml#/project_search_filter'
 

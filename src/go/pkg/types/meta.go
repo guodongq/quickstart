@@ -1,7 +1,9 @@
 package types
 
 import (
+	"context"
 	"encoding/json"
+	"github.com/guodongq/quickstart/pkg/middleware/auth"
 	"github.com/guodongq/quickstart/pkg/utils"
 	"time"
 )
@@ -26,8 +28,15 @@ func NewMeta() *Meta {
 	return &this
 }
 
-func NewMetaWithDefaults() *Meta {
-	this := Meta{}
+func NewMetaWithDefaults(ctx context.Context) *Meta {
+	now := time.Now()
+	user, _ := auth.UserFromCtx(ctx)
+	this := Meta{
+		CreatedAt: &now,
+		UpdatedAt: &now,
+		CreatedBy: &user.UUID,
+		UpdatedBy: &user.UUID,
+	}
 	return &this
 }
 
